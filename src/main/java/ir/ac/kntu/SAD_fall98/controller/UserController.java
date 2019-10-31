@@ -1,6 +1,6 @@
 package ir.ac.kntu.SAD_fall98.controller;
 
-import ir.ac.kntu.SAD_fall98.dto.UserDto;
+import ir.ac.kntu.SAD_fall98.domain.UserDto;
 import ir.ac.kntu.SAD_fall98.model.User;
 import ir.ac.kntu.SAD_fall98.service.UserService;
 import org.modelmapper.ModelMapper;
