@@ -1,4 +1,4 @@
-package ir.ac.kntu.SAD_fall98;
+package ir.ac.kntu.SAD_fall98.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
