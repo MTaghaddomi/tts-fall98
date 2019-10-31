@@ -6,6 +6,8 @@ import ir.ac.kntu.SAD_fall98.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public UserDto saveUser(@RequestBody UserDto userDto) {
-        System.out.println("userDto = " + userDto);
+    public UserDto saveUser(@RequestBody @Valid UserDto userDto) {
         User user = convertDtoToEntity(userDto);
         userService.save(user);
         return userDto;
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public UserDto getUser(@PathVariable long userId) {
+    public UserDto getUser(@PathVariable @Min(0) long userId) {
         User user = userService.findById(userId);
         UserDto userDto = convertToDto(user);
         return userDto;
