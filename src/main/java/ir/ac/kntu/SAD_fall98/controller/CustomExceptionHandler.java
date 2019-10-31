@@ -25,8 +25,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
             this.message = message;
             this.status = status;
             this.errorCode = status.value();
-            this.details = details == null || details.length == 0 ?
-                    null : Arrays.asList(details);
+            setDetails(details);
+        }
+
+        private void setDetails(String[] details){
+            this.details = details == null || details.length == 0 ? null :
+                    Arrays.asList(details);
         }
     }
 
