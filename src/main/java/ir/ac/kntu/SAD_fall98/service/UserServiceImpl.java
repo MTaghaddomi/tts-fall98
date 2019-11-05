@@ -22,9 +22,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        System.out.println(user);
+        System.out.println("UserService: ");
+        System.out.println("before save: " + user);
         User savedUser = userRepository.save(user);
-        System.out.println(savedUser);
+        System.out.println("after save: " + savedUser);
     }
 
     @Override

@@ -1,9 +1,10 @@
 package ir.ac.kntu.SAD_fall98.controller;
 
-import ir.ac.kntu.SAD_fall98.domain.UserDto;
+import ir.ac.kntu.SAD_fall98.domain.UserLoginDto;
 import ir.ac.kntu.SAD_fall98.model.User;
 import ir.ac.kntu.SAD_fall98.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,51 +13,58 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@Validated
 @RequestMapping("/api")
 public class UserController {
     private final UserService userService;
-    private final ModelMapper modelMapper;
 
     public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/users")
-    public UserDto saveUser(@RequestBody @Valid UserDto userDto) {
-        User user = convertDtoToEntity(userDto);
+    public UserLoginDto saveUser(@RequestBody @Valid UserLoginDto userLoginDto) {
+        User user = convertDtoToEntity(userLoginDto);
+        System.out.println("user = " + user);
         userService.save(user);
-        return userDto;
+        return userLoginDto;
     }
 
     @GetMapping("/users")
-    public List<UserDto> findAll() {
+    public List<UserLoginDto> findAll() {
         List<User> users = userService.findAll();
-        List<UserDto> usersDto = users.stream()
+        List<UserLoginDto> usersDto = users.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return usersDto;
     }
 
-    private UserDto convertToDto(User user) {
-        UserDto userDto = modelMapper.map(user, UserDto.class);
-        return userDto;
-    }
 
     @GetMapping("/users/{userId}")
-    public UserDto getUser(@PathVariable @Min(0) long userId) {
+    public UserLoginDto getUser(@PathVariable @Min(0) long userId) {
         User user = userService.findById(userId);
-        UserDto userDto = convertToDto(user);
-        return userDto;
+        UserLoginDto userLoginDto = convertToDto(user);
+        return userLoginDto;
     }
 
-
-    private User convertDtoToEntity(UserDto userDto) {
-        User user = User.builder()
-                .username(userDto.getUsername())
-                .password(userDto.getPassword())
-                .email(userDto.getEmail())
+    private UserLoginDto convertToDto(User user) {
+        UserLoginDto userLoginDto = UserLoginDto.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .id(user.getId())
+                .email(user.getEmail())
                 .build();
+        return userLoginDto;
+    }
+
+    private User convertDtoToEntity(UserLoginDto userLoginDto) {
+        User user = User.builder()
+                .username(userLoginDto.getUsername())
+                .password(userLoginDto.getPassword())
+                .id(userLoginDto.getId())
+                .email(userLoginDto.getEmail())
+                .build();
+
         return user;
     }
 

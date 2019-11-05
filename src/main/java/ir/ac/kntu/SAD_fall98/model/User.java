@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,13 +27,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotBlank(message = "firstname must not be blank")
+    //        @NotBlank(message = "firstname must not be blank")
+//    @Length(min = 5, max = 32)
     private String firstName;
 
     private String lastName;
 
     @NotBlank
-    @Min(value = 5, message = "username should have at least 5 character")
+    @Length(min = 5, max = 32)
     private String username;
 
     @NotBlank
@@ -57,6 +57,9 @@ public class User {
         return "User{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

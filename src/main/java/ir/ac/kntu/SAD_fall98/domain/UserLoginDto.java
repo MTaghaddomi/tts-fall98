@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class UserLoginDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -27,7 +27,7 @@ public class UserDto {
 
     @Length
     @NotBlank
-    @Length(min = 6, max = 30, message = "password length must be between 0 and 30")
+    @Length(min = 6, max = 30, message = "password length must be between 6 and 30")
     @NotBlank
     private String password;
 
@@ -36,7 +36,7 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "UserLoginDto{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
