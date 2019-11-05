@@ -2,7 +2,7 @@ package ir.ac.kntu.SAD_fall98.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.ac.kntu.SAD_fall98.SadFall98Application;
+import ir.ac.kntu.SAD_fall98.Application;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-@WebMvcTest(SadFall98Application.class)
+@WebMvcTest(Application.class)
 public abstract class AbstractRestControllerTest {
 
 //    @Autowired
