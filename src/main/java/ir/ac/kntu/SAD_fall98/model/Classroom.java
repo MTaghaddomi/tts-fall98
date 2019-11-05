@@ -1,5 +1,6 @@
 package ir.ac.kntu.SAD_fall98.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 public class Classroom {
     @Id
