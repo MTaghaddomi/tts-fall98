@@ -1,18 +1,17 @@
 package ir.ac.kntu.SAD_fall98.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Lesson {
     @Id
@@ -23,6 +22,7 @@ public class Lesson {
 
     private String description;
 
+    @ElementCollection
     private List<String> resources;
 
 }

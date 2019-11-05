@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableJpaRepositories
 @EnableTransactionManagement
-public class SadFall98Application {
+public class Application {
     @Autowired
     UserRepository userRepository;
 
@@ -30,7 +30,7 @@ public class SadFall98Application {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(SadFall98Application.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }
