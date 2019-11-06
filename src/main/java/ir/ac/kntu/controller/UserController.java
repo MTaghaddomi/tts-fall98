@@ -50,7 +50,7 @@ public class UserController {
 
     private User convertRegisterDtoToEntity(UserRegisterDto userRegisterDto) {
         String birthday = userRegisterDto.getBirthday();
-        LocalDate formattedDate = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate formattedDate = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         User user = User.builder()
                 .username(userRegisterDto.getUsername())
                 .password(userRegisterDto.getPassword())
