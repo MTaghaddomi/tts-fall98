@@ -53,7 +53,7 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     @ColumnDefault(value = "1")
-    private boolean isSubscribe;
+    private boolean subscribed;
 
     @Length(min = 11, max = 11, message = "phone number should has 11 digit")
     @Pattern(regexp = "09\\d{9}")
