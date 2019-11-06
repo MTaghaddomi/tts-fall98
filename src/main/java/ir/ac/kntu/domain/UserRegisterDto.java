@@ -43,6 +43,8 @@ public class UserRegisterDto {
     @Email
     private String email;
 
+    private boolean subscribe;
+
     @Override
     public String toString() {
         return "UserLoginDto{" +

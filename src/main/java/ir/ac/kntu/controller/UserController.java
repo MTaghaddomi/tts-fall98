@@ -43,6 +43,7 @@ public class UserController {
                 .firstName(savedUser.getFirstName())
                 .lastName(savedUser.getLastName())
                 .birthday(savedUser.getBirthday().toString())
+                .subscribe(savedUser.isSubscribe())
                 .build();
 
         return user;
@@ -60,6 +61,7 @@ public class UserController {
                 .firstName(userRegisterDto.getFirstName())
                 .lastName(userRegisterDto.getLastName())
                 .birthday(formattedDate)
+                .isSubscribe(userRegisterDto.isSubscribe())
                 .build();
         return user;
     }
