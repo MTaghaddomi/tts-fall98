@@ -36,5 +36,4 @@ public class Classroom {
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> students;
 
-
 }
