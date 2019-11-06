@@ -6,5 +6,6 @@ public class InvalidPassword extends RuntimeException {
     }
 
     public InvalidPassword() {
+        super("password is invalid");
     }
 }
