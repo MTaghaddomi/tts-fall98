@@ -1,8 +1,10 @@
 package ir.ac.kntu.domain;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,8 @@ import javax.validation.constraints.Pattern;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRegisterDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,7 +47,7 @@ public class UserRegisterDto {
     @Email
     private String email;
 
-    private boolean subscribe;
+    private boolean subscribed;
 
     @Override
     public String toString() {
