@@ -1,7 +1,11 @@
 package ir.ac.kntu.controller;
 
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.google.gson.Gson;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import ir.ac.kntu.exception.DuplicateUserException;
+import ir.ac.kntu.exception.UserNotExistedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +76,46 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
+    @ExceptionHandler(value = io.jsonwebtoken.SignatureException.class)
+    public ResponseEntity<Object> handleJwtSignitureNotMatched(
+            SignatureException ex, WebRequest request) {
+        log(ex);
+        String bodyOfResponse = gson.toJson(new ExceptionMessage(
+                ex.getMessage(), HttpStatus.FORBIDDEN));
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
+                HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(value = com.fasterxml.jackson.databind.exc.InvalidDefinitionException.class)
+    public ResponseEntity<Object> handleInstantiationFault(
+            InvalidDefinitionException ex, WebRequest request) {
+        log(ex);
+        String bodyOfResponse = gson.toJson(new ExceptionMessage(
+                ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY));
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
+                HttpStatus.UNPROCESSABLE_ENTITY, request);
+    }
+
+    @ExceptionHandler(value = io.jsonwebtoken.MalformedJwtException.class)
+    public ResponseEntity<Object> handleUnableToReadJson(
+            MalformedJwtException ex, WebRequest request) {
+        log(ex);
+        String bodyOfResponse = gson.toJson(new ExceptionMessage(
+                ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY));
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
+                HttpStatus.UNPROCESSABLE_ENTITY, request);
+    }
+
+    @ExceptionHandler(value = UserNotExistedException.class)
+    public ResponseEntity<Object> handleUserNotExistException(
+            UserNotExistedException ex, WebRequest request) {
+        log(ex);
+        String bodyOfResponse = gson.toJson(new ExceptionMessage(
+                ex.getMessage(), HttpStatus.NOT_FOUND));
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(),
+                HttpStatus.NOT_FOUND, request);
+    }
+
     @ExceptionHandler(value = DuplicateUserException.class)
     public ResponseEntity<Object> handleConstraintViolationException(
             DuplicateUserException ex, WebRequest request) {
@@ -83,6 +127,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private void log(Throwable throwable) {
-        logger.warn("exception handled:" + throwable.getClass().getSimpleName());
+        logger.warn("exception handled:" + throwable.getClass().getSimpleName()
+                + "\t" + throwable.getMessage());
     }
 }
