@@ -1,6 +1,6 @@
 package ir.ac.kntu.config;
 
-import ir.ac.kntu.service.UserService1;
+import ir.ac.kntu.service.UserService;
 import ir.ac.kntu.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserService1 userService;
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest,

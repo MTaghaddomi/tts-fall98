@@ -1,6 +1,6 @@
 package ir.ac.kntu.config;
 
-import ir.ac.kntu.service.UserService1;
+import ir.ac.kntu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    private UserService1 userService;
+    private UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
