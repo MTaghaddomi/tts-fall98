@@ -1,6 +1,5 @@
 package ir.ac.kntu;
 
-import ir.ac.kntu.model.User;
 import ir.ac.kntu.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -23,8 +22,8 @@ public class Application {
 
         @Override
         public void run(ApplicationArguments args) throws Exception {
-            User user1 = User.builder().username("admin").password("adminadmin").email("admin@gmail.com").build();
-            userRepository.save(user1);
+//            User user1 = User.builder().username("admin").password("adminadmin").email("admin@gmail.com").build();
+//            userRepository.save(user1);
         }
     }
 

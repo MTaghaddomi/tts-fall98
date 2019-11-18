@@ -46,7 +46,7 @@ public class JwtUtil {
     public String generateToken(UserDetails userDetails){
         String username = userDetails.getUsername();
         return Jwts.builder()
-                .setClaims(new HashMap<String, Object>())
+                .setClaims(new HashMap<>())
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))

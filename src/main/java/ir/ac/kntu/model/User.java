@@ -1,13 +1,15 @@
 package ir.ac.kntu.model;
 
-import ir.ac.kntu.validation.ValidPassword;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
@@ -29,8 +31,7 @@ public class User {
     @Length(min = 4, max = 20)
     private String username;
 
-    @ValidPassword
-    @Length(min = 6, max = 30, message = "password length must be between 6 and 30")
+    //    @Length(min = 6, max = 30, message = "password length must be between 6 and 30")
     @NotBlank
     private String password;
 
