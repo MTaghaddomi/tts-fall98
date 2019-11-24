@@ -3,7 +3,9 @@ package ir.ac.kntu.controller;
 import ir.ac.kntu.domain.*;
 import ir.ac.kntu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,8 +22,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserSignInResponseDTO signIn(@RequestBody UserSignInRequestDTO userDTO){
-        return userService.signIn(userDTO);
+    public ResponseEntity<UserSignInRequestDTO> signIn(@RequestBody UserSignInRequestDTO userDTO){
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin", "https://system-analysis-design.herokuapp.com/");
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(userDTO);
     }
 
     @GetMapping("/{username}")
