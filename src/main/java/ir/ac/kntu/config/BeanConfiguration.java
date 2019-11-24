@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
-// @EnableWebMvc
+ @EnableWebMvc
 @EnableWebSecurity
 public class BeanConfiguration {
     @Bean
@@ -16,7 +16,7 @@ public class BeanConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/*").allowedOrigins("http://localhost:8080");
+                    registry.addMapping("/**").allowedOrigins("http://localhost:8080");
                 // registry.addMapping("").allowedOrigins("http://localhost:8080");
             }
         };
