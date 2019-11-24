@@ -58,6 +58,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
         
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
         @Bean
         CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
@@ -67,5 +68,5 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
             source.registerCorsConfiguration("/**", configuration);
             return source;
         }
-    }
 }
+
