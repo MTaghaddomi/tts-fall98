@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<UserSignInRequestDTO> signIn(@RequestBody UserSignInRequestDTO userDTO){
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "https://system-analysis-design.herokuapp.com/");
+        responseHeaders.set("Access-Control-Allow-Origin", "https://system-analysis-design.herokuapp.com");
         return ResponseEntity.ok()
                 .headers(responseHeaders)
                 .body(userDTO);
