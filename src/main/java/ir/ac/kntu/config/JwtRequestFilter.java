@@ -35,6 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if(jwtToken != null){
             username = jwtUtil.token2username(jwtToken);
+            logger.info(jwtToken);
         }
 
         if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
