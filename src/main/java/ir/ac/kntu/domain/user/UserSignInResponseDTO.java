@@ -1,4 +1,4 @@
-package ir.ac.kntu.domain;
+package ir.ac.kntu.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

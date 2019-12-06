@@ -1,6 +1,6 @@
 package ir.ac.kntu.service;
 
-import ir.ac.kntu.domain.*;
+import ir.ac.kntu.domain.user.*;
 import ir.ac.kntu.exception.DuplicateUserException;
 import ir.ac.kntu.exception.UserNotExistedException;
 import ir.ac.kntu.model.User;

@@ -1,6 +1,6 @@
 package ir.ac.kntu.controller;
 
-import ir.ac.kntu.domain.*;
+import ir.ac.kntu.domain.user.*;
 import ir.ac.kntu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
