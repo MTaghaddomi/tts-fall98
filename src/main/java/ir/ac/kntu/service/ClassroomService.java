@@ -1,16 +1,52 @@
 package ir.ac.kntu.service;
 
+import ir.ac.kntu.exception.ClassroomNotFoundException;
 import ir.ac.kntu.model.Classroom;
+import ir.ac.kntu.repository.ClassroomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ClassroomService {
-    List<Classroom> findAll();
+@Service
+public class ClassroomService {
+    @Autowired
+    private ClassroomRepository repository;
 
-    List<Classroom> searchClassroom(String searchItem);
+    public ClassroomService(ClassroomRepository repository) {
+        this.repository = repository;
+    }
 
+    public List<Classroom> findAll() {
+        return repository.findAll();
+    }
 
-    Classroom createClassroom(Classroom classroom);
+    public List<Classroom> searchClassroom(String searchItem) {
+        return repository.findAllClassroomsByNameContains(searchItem);
+    }
 
-    void deleteClassroom(long id);
+    public Classroom createClassroom(Classroom classroom) {
+        Classroom saved = repository.save(classroom);
+        return saved;
+    }
+
+    public void deleteClassroom(String name) {
+        Optional<Classroom> optionalClassroom = repository.findClassroomByName(name);
+        Classroom classroom = optionalClassroom.orElseThrow(ClassroomNotFoundException::new);
+        repository.delete(classroom);
+    }
+
+    public List<Classroom> findByLessonName(String lessonName) {
+        return repository.findClassroomsByLessonName(lessonName);
+    }
+
+    public Classroom updateClassroom(Classroom classroom) {
+        return repository.save(classroom);
+    }
+
+    public Classroom findByClassroomName(String classroomName) {
+        Optional<Classroom> optionalClass = repository.findClassroomByName(classroomName);
+        return optionalClass.orElseThrow(ClassroomNotFoundException::new);
+    }
 }

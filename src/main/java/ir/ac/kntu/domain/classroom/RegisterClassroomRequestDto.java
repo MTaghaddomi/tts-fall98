@@ -1,7 +1,6 @@
-package ir.ac.kntu.domain;
+package ir.ac.kntu.domain.classroom;
 
 import ir.ac.kntu.model.Lesson;
-import ir.ac.kntu.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,15 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClassroomDto {
-    private long id;
-
+public class RegisterClassroomRequestDto {
     private String name;
 
     private String description;
 
-    private User teacher;
+//    private TeacherDto teacher;
 
     private Lesson lesson;
-
 }

@@ -20,6 +20,7 @@ public class Classroom {
     private long id;
 
     @NotBlank
+    @Column(unique = true)
     private String name;
 
     private String description;

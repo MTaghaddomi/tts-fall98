@@ -5,8 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Data
@@ -18,11 +21,12 @@ public class Lesson {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotBlank
     private String name;
 
     private String description;
 
-    @ElementCollection
-    private List<String> resources;
+//    @ElementCollection
+//    private List<String> resources;
 
 }

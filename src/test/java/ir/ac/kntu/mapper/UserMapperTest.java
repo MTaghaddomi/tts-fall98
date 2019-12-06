@@ -1,7 +1,7 @@
 package ir.ac.kntu.mapper;
 
-import ir.ac.kntu.domain.UserProfileDTO;
-import ir.ac.kntu.domain.UserSignInRequestDTO;
+import ir.ac.kntu.domain.user.UserProfileDTO;
+import ir.ac.kntu.domain.user.UserSignInRequestDTO;
 import ir.ac.kntu.model.User;
 import org.junit.Test;
 import org.mapstruct.factory.Mappers;
