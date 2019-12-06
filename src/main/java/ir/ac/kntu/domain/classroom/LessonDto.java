@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author Morteza Taghaddomi
+ */
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class RegisterClassroomRequestDto {
+@AllArgsConstructor
+public class LessonDto {
     private String name;
-
     private String description;
-
-    private TeacherDto teacher;
-
-    private LessonDto lesson;
 }

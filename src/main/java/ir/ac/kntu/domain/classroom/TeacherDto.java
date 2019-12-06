@@ -1,17 +1,24 @@
 package ir.ac.kntu.domain.classroom;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 /**
  * @author Morteza Taghaddomi
  */
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TeacherDto {
 
-    @NotBlank
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
     @Email
