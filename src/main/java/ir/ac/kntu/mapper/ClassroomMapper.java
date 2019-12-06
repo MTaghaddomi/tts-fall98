@@ -21,4 +21,5 @@ public interface ClassroomMapper {
 
     Classroom convertEditableClassroomDto(EditableClassroomRequestDto editClassDto);
 
+
 }
