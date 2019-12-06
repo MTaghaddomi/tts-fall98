@@ -22,13 +22,12 @@ public class ClassroomService {
         return repository.findAll();
     }
 
-    public List<Classroom> searchClassroom(String searchItem) {
+    private List<Classroom> searchClassroomByNameContains(String searchItem) {
         return repository.findAllClassroomsByNameContains(searchItem);
     }
 
     public Classroom createClassroom(Classroom classroom) {
-        Classroom saved = repository.save(classroom);
-        return saved;
+        return repository.save(classroom);
     }
 
     public void deleteClassroom(String name) {
@@ -37,7 +36,7 @@ public class ClassroomService {
         repository.delete(classroom);
     }
 
-    public List<Classroom> findByLessonName(String lessonName) {
+    private List<Classroom> findByLessonName(String lessonName) {
         return repository.findClassroomsByLessonName(lessonName);
     }
 
@@ -49,4 +48,13 @@ public class ClassroomService {
         Optional<Classroom> optionalClass = repository.findClassroomByName(classroomName);
         return optionalClass.orElseThrow(ClassroomNotFoundException::new);
     }
+
+    public List<Classroom> searchClassroom(String name, String lessonName) {
+        if (name != null) {
+            return searchClassroomByNameContains(name);
+        } else {
+            return findByLessonName(lessonName);
+        }
+    }
+
 }
