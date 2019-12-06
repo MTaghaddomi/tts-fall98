@@ -59,7 +59,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/").permitAll()//sign-in
                 .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+//                .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
