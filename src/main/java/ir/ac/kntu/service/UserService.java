@@ -3,12 +3,14 @@ package ir.ac.kntu.service;
 import ir.ac.kntu.domain.user.*;
 import ir.ac.kntu.exception.DuplicateUserException;
 import ir.ac.kntu.exception.UserNotExistedException;
+import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.repository.UserRepository;
 import ir.ac.kntu.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,8 +27,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder bcryptEncode;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -131,18 +134,41 @@ public class UserService implements UserDetailsService {
         return HttpStatus.OK;
     }
 
+    public List<Classroom> getUserClasses(){
+        String username = getUsernameOfRequester();
+        User user = findByUsername(username).orElseThrow(UserNotExistedException::new);
+        return user.getMyClasses();
+    }
+
     private Optional<User> findByUsername(final String username){
         Optional<User> result = Optional.empty();
 
         //repository should responsible for this, but it does not :|
+        if(username == null){
+            return result;
+        }
         for(User user : userRepository.findAll()){
             if(user.getUsername().equals(username)){
                 result = Optional.of(user);
                 break;
             }
         }
+        //
 
         return result;
+    }
+
+    public static String getUsernameOfRequester(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+//            username = principal.toString();
+            username = null;
+        }
+
+        return username;
     }
 
     @Override
