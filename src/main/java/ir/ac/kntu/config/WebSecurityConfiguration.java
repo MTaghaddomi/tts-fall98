@@ -24,7 +24,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfigurationn extends WebSecurityConfigurerAdapter{
     @Autowired
     private JwtEntryPoint jwtEntryPoint;
 
