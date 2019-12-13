@@ -78,7 +78,46 @@ response: list of ClassroomGeneralInfo{name:string, lesson:string, teacher:strin
 
 **_#api(class requests):_**
 
-(todo: add CRUD api)
+**create new class**
+
+POST
+/classrooms
+
+header: "Auth" => value=token
+
+request body: {name:string, description:string, lesson:{name:string, description:string}}
+
+response: {name:string, lesson:string, teacher:string}
+
+**update specific class**
+
+PUT
+/classrooms/{classroomName}
+
+(replace {classroomName} with the classroom's name)
+
+header: "Auth" => value=token
+
+request body: {name:string, description:string, lesson:{name:string, description:string}, assistants:(...), students:(...)}
+
+students,assistants: list of userInfo{firstName:string, lastName:string, email:string}
+
+response: {name:string, lesson:string, teacher:string}
+
+
+**delete specific class**
+
+DELETE
+/classrooms/{classroomName}
+
+(replace {classroomName} with the classroom's name)
+
+header: "Auth" => value=token
+
+response: 200-OK if successfully deleted
+
+
+
 
 **get classroom details**
 
