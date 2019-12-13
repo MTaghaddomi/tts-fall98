@@ -112,3 +112,125 @@ response: list of exerciseInfo{id:long, subject:string}
 
 NOTE: is no exercise exist for the user(who sends request), list will be null
 
+
+**_#api(exercise requests):_**
+
+
+**create new exercise**
+
+POST
+/exercise/{classroomName}
+
+(replace {classroomName} with the classroom's name)
+
+header: "Auth" => value=token
+
+request body: {subject:string, description:string, deadline:timestamp, lateDeadline:timestamp, accessLevel}
+
+response: {id:long, subject:string, description:string, deadline:timestamp, lateDeadline:timestamp, accessLevel, fileUrls{list of string}}
+
+**get detail info of specific exercise**
+
+GET
+/exercise/{id}
+
+(replace {id} with the exercise's id)
+
+header: "Auth" => value=token
+
+response: {id:long, subject:string, description:string, deadline:timestamp, lateDeadline:timestamp, accessLevel, fileUrls:list of string}
+
+
+**update specific exercise**
+
+PUT
+/exercise/{id}
+
+(replace {id} with the exercise's id)
+
+header: "Auth" => value=token
+
+request body: {subject:string, description:string, deadline:timestamp, lateDeadline:timestamp, accessLevel}
+
+response: {id:long, subject:string, description:string, deadline:timestamp, lateDeadline:timestamp, accessLevel, fileUrls:list of string}
+
+
+**delete specific exercise**
+
+DELETE
+/exercise/{id}
+
+(replace {id} with the exercise's id)
+
+header: "Auth" => value=token
+
+response: 200-OK if successfully deleted
+
+
+**get all submitted answers of specific exercise**
+
+GET
+/exercise/{id}/answers
+
+(replace {id} with the exercise's id)
+
+header: "Auth" => value=token
+
+response: list of strings(file URLs)
+
+
+
+**_#api(answer requests):_**
+
+**submit new answer**
+
+POST
+/exercise/answer/{exerciseId}
+
+(replace {exerciseId} with the exercise's id)
+
+header: "Auth" => value=token
+
+request body: {text:string}
+
+response: {id:long, text:string, fileUrls:list of strings}
+
+
+**update specific answer**
+
+PUT
+/exercise/answer/{answerId}
+
+(replace {answerId} with the answer's id)
+
+header: "Auth" => value=token
+
+request body: {text:string}
+
+response: {id:long, text:string, fileUrls:list of strings}
+
+
+**delete specific answer**
+
+DELETE
+/exercise/answer/{answerId}
+
+replace {answerId} with the answer's id)
+
+header: "Auth" => value=token
+
+response: 200-OK if successfully deleted
+
+
+**get answer detail info**
+
+GET
+/exercise/answer/{answerId}
+
+(replace {answerId} with the answer's id)
+
+header: "Auth" => value=token
+
+response: {id:long, text:string, fileUrls:list of strings}
+
+
