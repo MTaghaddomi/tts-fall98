@@ -103,17 +103,17 @@ public class ClassroomService {
         return userExercise;
     }
 
-    private boolean isStudentIn(final String requesterUsername, final Classroom classroom){
+    public boolean isStudentIn(final String requesterUsername, final Classroom classroom){
         return classroom.getStudents().stream()
                 .filter(student -> student.getUsername().equals(requesterUsername))
                 .count()>0;
     }
 
-    private boolean isTeacherIn(final String requesterUsername, final Classroom classroom){
+    public boolean isTeacherIn(final String requesterUsername, final Classroom classroom){
         return classroom.getTeacher().getUsername().equals(requesterUsername);
     }
 
-    private boolean isAssistantIn(final String requesterUsername, final Classroom classroom){
+    public boolean isAssistantIn(final String requesterUsername, final Classroom classroom){
         return classroom.getAssistant().stream()
                 .filter(student -> student.getUsername().equals(requesterUsername))
                 .count()>0;

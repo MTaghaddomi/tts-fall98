@@ -140,7 +140,7 @@ public class UserService implements UserDetailsService {
         return user.getMyClasses();
     }
 
-    private Optional<User> findByUsername(final String username){
+    public Optional<User> findByUsername(final String username){
         Optional<User> result = Optional.empty();
 
         //repository should responsible for this, but it does not :|
