@@ -14,7 +14,5 @@ public class RegisterClassroomRequestDto {
 
     private String description;
 
-    private TeacherDto teacher;
-
     private LessonDto lesson;
 }
