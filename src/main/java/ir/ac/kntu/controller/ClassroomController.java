@@ -6,6 +6,7 @@ import ir.ac.kntu.domain.user.UserInfoDTO;
 import ir.ac.kntu.mapper.ClassroomMapper;
 import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.model.ExerciseSubmission;
+import ir.ac.kntu.model.Lesson;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.service.ClassroomService;
 import org.mapstruct.factory.Mappers;
@@ -47,18 +48,69 @@ public class ClassroomController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public RegisterClassroomResponseDto createClassroom(@RequestBody RegisterClassroomRequestDto registerClassDto) {
-        // Todo validate user , get User from database
-        Classroom classroom = mapper.convertClassroomRegisterDto(registerClassDto);
-        classroomService.createClassroom(classroom);
-        return new RegisterClassroomResponseDto();
+    public ClassroomGeneralInfoDTO createClassroom(
+            @RequestBody RegisterClassroomRequestDto registerClassDto) {
+
+        //TODO: use mapper instead
+        Classroom classroom = new Classroom();
+        classroom.setName(registerClassDto.getName());
+        classroom.setDescription(registerClassDto.getDescription());
+        Lesson lesson = new Lesson();
+        lesson.setName(registerClassDto.getLesson().getName());
+        lesson.setDescription(registerClassDto.getLesson().getDescription());
+        classroom.setLesson(lesson);
+        //set teacher --> servise
+        //
+
+        classroom = classroomService.createClassroom(classroom);
+
+        ClassroomGeneralInfoDTO result = convertClass2ClassGeneralInfoDTO(classroom);
+
+        return result;
     }
 
-    @PutMapping
+    @PutMapping("/{classroomName}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateClassroom(@RequestBody EditableClassroomRequestDto editClassDto) {
-        Classroom classroom = mapper.convertEditableClassroomDto(editClassDto);
-        classroomService.updateClassroom(classroom);
+    public ClassroomGeneralInfoDTO updateClassroom(
+            @PathVariable String classroomName,
+            @RequestBody EditableClassroomRequestDto editClassDto) {
+
+        //TODO: use mapper instead
+        Classroom editClass = new Classroom();
+        editClass.setName(editClassDto.getName());
+        editClass.setDescription(editClassDto.getDescription());
+        Lesson lesson = new Lesson();
+        lesson.setName(editClassDto.getLesson().getName());
+        lesson.setDescription(editClassDto.getLesson().getDescription());
+        editClass.setLesson(lesson);
+        List<User> assistants = new ArrayList<>();
+        for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
+            User user = new User();
+            user.setFirstName(userInfoDTO.getFirstName());
+            user.setLastName(userInfoDTO.getLastName());
+            user.setUsername(userInfoDTO.getEmail());
+            user.setEmail(userInfoDTO.getEmail());
+            assistants.add(user);
+        }
+        editClass.setAssistant(assistants);
+        List<User> students = new ArrayList<>();
+        for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
+            User user = new User();
+            user.setFirstName(userInfoDTO.getFirstName());
+            user.setLastName(userInfoDTO.getLastName());
+            user.setUsername(userInfoDTO.getEmail());
+            user.setEmail(userInfoDTO.getEmail());
+            students.add(user);
+        }
+        editClass.setStudents(students);
+        //
+
+        Classroom classroom = classroomService.updateClassroom
+                (classroomName, editClass);
+
+        ClassroomGeneralInfoDTO result = convertClass2ClassGeneralInfoDTO(classroom);
+
+        return result;
     }
 
     @DeleteMapping("/{classroomName}")
@@ -99,6 +151,17 @@ public class ClassroomController {
         return classroomInfoDTO;
     }
 
+    @PostMapping("/join/{classroomName}")
+    public ClassroomGeneralInfoDTO joinClass(
+            @PathVariable String classroomName){
+
+        Classroom classroom = classroomService.joinClass(classroomName);
+
+        ClassroomGeneralInfoDTO result = convertClass2ClassGeneralInfoDTO(classroom);
+
+        return result;
+    }
+
     @GetMapping("/{classroomName}/exercises")
     public List<ExerciseSubmission> getClassroomExercises(
             @PathVariable String classroomName){
@@ -118,5 +181,17 @@ public class ClassroomController {
         //
 
         return exercises;
+    }
+
+    private ClassroomGeneralInfoDTO convertClass2ClassGeneralInfoDTO
+            (Classroom classroom){
+        //TODO: use mapper instead
+        ClassroomGeneralInfoDTO result = new ClassroomGeneralInfoDTO();
+        result.setName(classroom.getName());
+        result.setLesson(classroom.getLesson().getName());
+        result.setTeacher(classroom.getTeacher().getLastName());
+        //
+
+        return result;
     }
 }
