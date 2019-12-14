@@ -24,7 +24,7 @@ public class Lesson {
     @NotBlank
     private String name;
 
-    private String description;
+//    private String description;
 
 //    @ElementCollection
 //    private List<String> resources;

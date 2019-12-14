@@ -68,7 +68,7 @@ public class ClassroomMapperTest {
                 .name("ap981")
                 .description("advanced programming fall 98")
                 .lesson(advanced_programming)
-                .teacher(teacher)
+//                .teacher(teacher)
                 .build();
 
         // When

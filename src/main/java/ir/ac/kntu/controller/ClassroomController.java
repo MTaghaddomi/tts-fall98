@@ -57,7 +57,7 @@ public class ClassroomController {
         classroom.setDescription(registerClassDto.getDescription());
         Lesson lesson = new Lesson();
         lesson.setName(registerClassDto.getLesson().getName());
-        lesson.setDescription(registerClassDto.getLesson().getDescription());
+//        lesson.setDescription(registerClassDto.getLesson().getDescription());
         classroom.setLesson(lesson);
         //set teacher --> servise
         //
@@ -81,7 +81,7 @@ public class ClassroomController {
         editClass.setDescription(editClassDto.getDescription());
         Lesson lesson = new Lesson();
         lesson.setName(editClassDto.getLesson().getName());
-        lesson.setDescription(editClassDto.getLesson().getDescription());
+//        lesson.setDescription(editClassDto.getLesson().getDescription());
         editClass.setLesson(lesson);
         List<User> assistants = new ArrayList<>();
         for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
@@ -129,8 +129,9 @@ public class ClassroomController {
         ClassroomDetailInfoDTO classroomInfoDTO = new ClassroomDetailInfoDTO();
         classroomInfoDTO.setName(classroom.getName());
         classroomInfoDTO.setDescription(classroom.getDescription());
-        classroomInfoDTO.setLesson(new LessonDto(classroom.getLesson().getName(),
-                classroom.getLesson().getDescription()));
+        classroomInfoDTO.setLesson(new LessonDto(classroom.getLesson().getName()//,
+//                classroom.getLesson().getDescription()));
+                ));
         User teacher = classroom.getTeacher();
         classroomInfoDTO.setTeacherInfo(new UserInfoDTO(teacher.getFirstName(),
                 teacher.getLastName(), teacher.getEmail()));
@@ -189,7 +190,8 @@ public class ClassroomController {
         ClassroomGeneralInfoDTO result = new ClassroomGeneralInfoDTO();
         result.setName(classroom.getName());
         result.setLesson(classroom.getLesson().getName());
-        result.setTeacher(classroom.getTeacher().getLastName());
+        result.setTeacher(classroom.getTeacher().getFirstName() + " " +
+                classroom.getTeacher().getLastName());
         //
 
         return result;

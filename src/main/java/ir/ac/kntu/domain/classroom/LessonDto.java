@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LessonDto {
     private String name;
-    private String description;
+//    private String description;
 }
