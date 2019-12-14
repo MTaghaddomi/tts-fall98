@@ -36,7 +36,7 @@ public class ClassroomService {
     }
 
     public Classroom createClassroom(Classroom classroom) {
-        String requesterUsername = userService.getUsernameOfRequester();
+        String requesterUsername = UserService.getUsernameOfRequester();
         User requester = userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new);
         classroom.setTeacher(requester);
@@ -48,7 +48,7 @@ public class ClassroomService {
         Classroom classroom = repository.findClassroomByName(name)
                 .orElseThrow(ClassroomNotFoundException::new);
 
-        String requesterUsername = userService.getUsernameOfRequester();
+        String requesterUsername = UserService.getUsernameOfRequester();
         if(! classroom.getTeacher().getUsername().equals(requesterUsername)){
             throw new NotEnoughAccessLevelException();
         }
@@ -67,7 +67,7 @@ public class ClassroomService {
     public Classroom updateClassroom(String className, Classroom editClass) {
         Classroom classroom = findByClassroomName(className);
 
-        String requesterUsername = userService.getUsernameOfRequester();
+        String requesterUsername = UserService.getUsernameOfRequester();
         if(! isTeacherIn(requesterUsername, classroom)){
             throw new NotEnoughAccessLevelException();
         }
@@ -78,7 +78,6 @@ public class ClassroomService {
         classroom.setDescription(editClass.getDescription());
         Lesson lesson = classroom.getLesson();
         lesson.setName(editClass.getLesson().getName());
-        lesson.setDescription(editClass.getLesson().getDescription());
         classroom.setAssistant(editClass.getAssistant());
         classroom.setStudents(editClass.getStudents());
 
@@ -159,7 +158,7 @@ public class ClassroomService {
     }
 
     public Classroom joinClass(String classroomName) {
-        String requesterUsername = userService.getUsernameOfRequester();
+        String requesterUsername = UserService.getUsernameOfRequester();
         User requester = userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new);
 
