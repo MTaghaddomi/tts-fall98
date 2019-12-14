@@ -1,18 +1,16 @@
-package ir.ac.kntu.domain.classroom;
+package ir.ac.kntu.domain.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Morteza Taghaddomi
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LessonDto {
-    private String name;
-//    private String description;
+public class UserInfoDTO {
+    private String firstName;
+    private String lastName;
+    private String email;
 }

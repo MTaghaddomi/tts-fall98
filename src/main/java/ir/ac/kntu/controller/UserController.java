@@ -1,10 +1,15 @@
 package ir.ac.kntu.controller;
 
+import ir.ac.kntu.domain.classroom.ClassroomGeneralInfoDTO;
 import ir.ac.kntu.domain.user.*;
+import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(maxAge = 3600)
@@ -45,5 +50,22 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public HttpStatus deleteAccount(@PathVariable String username){
         return userService.deleteUser(username);
+    }
+
+    @GetMapping("/myClasses")
+    public List<ClassroomGeneralInfoDTO> getMyClasses(){
+        List<Classroom> myClasses = userService.getUserClasses();
+        List<ClassroomGeneralInfoDTO> myClassesDTO = new ArrayList<>();
+
+        //TODO: use mapper instead
+        for(Classroom classroom : myClasses){
+            String name = classroom.getName();
+            String lesson = classroom.getLesson().getName();
+            String teacher = classroom.getTeacher().getLastName();
+            myClassesDTO.add(new ClassroomGeneralInfoDTO(name, lesson, teacher));
+        }
+        //
+
+        return myClassesDTO;
     }
 }

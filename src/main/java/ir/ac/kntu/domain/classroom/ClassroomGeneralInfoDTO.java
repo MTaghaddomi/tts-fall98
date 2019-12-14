@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class RegisterClassroomRequestDto {
+@AllArgsConstructor
+public class ClassroomGeneralInfoDTO {
     private String name;
-
-    private String description;
-
-    private LessonDto lesson;
+    private String lesson;
+    private String teacher;
 }

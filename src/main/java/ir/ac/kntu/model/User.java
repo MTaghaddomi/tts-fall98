@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -50,4 +48,6 @@ public class User {
 //    @Pattern(regexp = "09\\d{9}")
     private String phoneNumber;
 
+    @ManyToMany(mappedBy = "students")
+    private List<Classroom> myClasses;
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Wither
 public class Classroom {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,10 +33,19 @@ public class Classroom {
     @OneToOne(cascade = CascadeType.ALL)
     private Lesson lesson;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "ta",
+            joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "ta_id", referencedColumnName = "id"))
     private List<User> assistant;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "participate",
+            joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     private List<User> students;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ExerciseSubmission> exercises;
 
 }
