@@ -87,6 +87,7 @@ public class ClassroomController {
         List<User> assistants = new ArrayList<>();
         for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
             User user = new User();
+            user.setId(userInfoDTO.getId());
             user.setFirstName(userInfoDTO.getFirstName());
             user.setLastName(userInfoDTO.getLastName());
             user.setUsername(userInfoDTO.getEmail());
@@ -97,6 +98,7 @@ public class ClassroomController {
         List<User> students = new ArrayList<>();
         for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
             User user = new User();
+            user.setId(userInfoDTO.getId());
             user.setFirstName(userInfoDTO.getFirstName());
             user.setLastName(userInfoDTO.getLastName());
             user.setUsername(userInfoDTO.getEmail());
@@ -134,7 +136,7 @@ public class ClassroomController {
 //                classroom.getLesson().getDescription()));
                 ));
         User teacher = classroom.getTeacher();
-        classroomInfoDTO.setTeacherInfo(new UserInfoDTO(teacher.getFirstName(),
+        classroomInfoDTO.setTeacherInfo(new UserInfoDTO(teacher.getId(), teacher.getFirstName(),
                 teacher.getLastName(), teacher.getEmail()));
         List<User> students = classroom.getStudents();
         List<UserInfoDTO> studentsInfo;
@@ -144,7 +146,7 @@ public class ClassroomController {
             studentsInfo = new ArrayList<>();
             for(User s : students){
                 studentsInfo.add(new UserInfoDTO
-                        (s.getFirstName(), s.getLastName(), s.getEmail()));
+                        (s.getId(), s.getFirstName(), s.getLastName(), s.getEmail()));
             }
         }
         classroomInfoDTO.setStudentsInfo(studentsInfo);
