@@ -9,6 +9,7 @@ import ir.ac.kntu.model.ExerciseSubmission;
 import ir.ac.kntu.model.Lesson;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.service.ClassroomService;
+import ir.ac.kntu.service.UserService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -85,7 +86,7 @@ public class ClassroomController {
 //        lesson.setDescription(editClassDto.getLesson().getDescription());
         editClass.setLesson(lesson);
         List<User> assistants = new ArrayList<>();
-        for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
+        for (UserInfoDTO userInfoDTO : editClassDto.getAssistant()) {
             User user = new User();
             user.setUsername(user.getUsername());
             user.setFirstName(userInfoDTO.getFirstName());
@@ -96,10 +97,9 @@ public class ClassroomController {
         }
         editClass.setAssistant(assistants);
         List<User> students = new ArrayList<>();
-        for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
+        for (UserInfoDTO userInfoDTO : editClassDto.getStudents()) {
             User user = new User();
             user.setUsername(user.getUsername());
-            user.setId(userInfoDTO.getId());
             user.setFirstName(userInfoDTO.getFirstName());
             user.setLastName(userInfoDTO.getLastName());
             user.setUsername(userInfoDTO.getEmail());
@@ -125,7 +125,7 @@ public class ClassroomController {
 
     @GetMapping("/{classroomName}")
     public ClassroomDetailInfoDTO getClassroomDetailInfo(
-            @PathVariable String classroomName){
+            @PathVariable String classroomName) {
         Classroom classroom = classroomService
                 .getClassroomDetailForRequester(classroomName);
 
@@ -135,22 +135,31 @@ public class ClassroomController {
         classroomInfoDTO.setDescription(classroom.getDescription());
         classroomInfoDTO.setLesson(new LessonDto(classroom.getLesson().getName()//,
 //                classroom.getLesson().getDescription()));
-                ));
+        ));
         User teacher = classroom.getTeacher();
         classroomInfoDTO.setTeacherInfo(new UserInfoDTO(teacher.getUsername(), teacher.getFirstName(),
                 teacher.getLastName(), teacher.getEmail()));
         List<User> students = classroom.getStudents();
         List<UserInfoDTO> studentsInfo;
-        if(students == null || students.isEmpty()){
+        if (students == null || students.isEmpty()) {
             studentsInfo = null;
-        }else{
+        } else {
             studentsInfo = new ArrayList<>();
-            for(User s : students){
+            for (User s : students) {
                 studentsInfo.add(new UserInfoDTO
                         (s.getUsername(), s.getFirstName(), s.getLastName(), s.getEmail()));
             }
         }
         classroomInfoDTO.setStudentsInfo(studentsInfo);
+
+        String requesterUsername = UserService.getUsernameOfRequester();
+        if(classroomService.isTeacherIn(requesterUsername, classroom)){
+            classroomInfoDTO.setRole("teacher");
+        }else if(classroomService.isStudentIn(requesterUsername, classroom)){
+            classroomInfoDTO.setRole("student");
+        }else if(classroomService.isAssistantIn(requesterUsername, classroom)){
+            classroomInfoDTO.setRole("assistant");
+        }
         //
 
         return classroomInfoDTO;
@@ -158,7 +167,7 @@ public class ClassroomController {
 
     @PostMapping("/join/{classroomName}")
     public ClassroomGeneralInfoDTO joinClass(
-            @PathVariable String classroomName){
+            @PathVariable String classroomName) {
 
         Classroom classroom = classroomService.joinClass(classroomName);
 
@@ -169,16 +178,16 @@ public class ClassroomController {
 
     @GetMapping("/{classroomName}/exercises")
     public List<ExerciseSubmission> getClassroomExercises(
-            @PathVariable String classroomName){
+            @PathVariable String classroomName) {
         List<ExerciseSubmission> exercises = classroomService
                 .getExercises(classroomName);
 
         List<ExerciseSubmissionGeneralInfoDTO> exercisesInfo = new ArrayList<>();
         //TODO: use mapper instead
-        if(exercises == null || exercises.isEmpty()){
+        if (exercises == null || exercises.isEmpty()) {
             exercises = null;
-        }else{
-            for(ExerciseSubmission exercise : exercises){
+        } else {
+            for (ExerciseSubmission exercise : exercises) {
                 exercisesInfo.add(new ExerciseSubmissionGeneralInfoDTO
                         (exercise.getId(), exercise.getSubject()));
             }
@@ -189,7 +198,7 @@ public class ClassroomController {
     }
 
     private ClassroomGeneralInfoDTO convertClass2ClassGeneralInfoDTO
-            (Classroom classroom){
+            (Classroom classroom) {
         //TODO: use mapper instead
         ClassroomGeneralInfoDTO result = new ClassroomGeneralInfoDTO();
         result.setName(classroom.getName());
