@@ -33,9 +33,22 @@ public class ClassroomController {
     @GetMapping
     public List<SearchClassroomDto> findAllClassrooms() {
         List<Classroom> classrooms = classroomService.findAll();
-        return classrooms.stream()
-                .map(mapper::convertSearchClassroomDto)
-                .collect(Collectors.toList());
+        classrooms.forEach(System.out::println);
+
+        List<SearchClassroomDto> studentsDto = new ArrayList<>();
+        for (Classroom classroom : classrooms) {
+            SearchClassroomDto dto = SearchClassroomDto.builder()
+                    .name(classroom.getName())
+                    .teacherName(classroom.getTeacher().getFirstName() + classroom.getTeacher().getLastName())
+                    .description(classroom.getDescription())
+                    .lessonName(classroom.getLesson().getName())
+                    .build();
+
+            studentsDto.add(dto);
+        }
+
+        return studentsDto;
+
     }
 
     @GetMapping("/search")

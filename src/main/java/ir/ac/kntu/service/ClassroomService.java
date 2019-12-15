@@ -104,9 +104,9 @@ public class ClassroomService {
                 isAssistantIn(requesterUsername, classroom)){
             return classroom;
         }else if(isStudentIn(requesterUsername, classroom)){
-            return classroom.withStudents(null);
+            return classroom.withStudents(new ArrayList<>());
         }else{
-            return classroom.withStudents(null).withAssistant(null);
+            return classroom.withStudents(new ArrayList<>()).withAssistant(new ArrayList<>());
         }
     }
 
