@@ -41,8 +41,8 @@ public class Classroom {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "participate",
-            joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> students;
 
     @OneToMany(cascade = CascadeType.ALL)
