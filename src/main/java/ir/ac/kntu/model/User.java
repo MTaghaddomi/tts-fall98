@@ -48,6 +48,6 @@ public class User {
 //    @Pattern(regexp = "09\\d{9}")
     private String phoneNumber;
 
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
     private List<Classroom> myClasses;
 }

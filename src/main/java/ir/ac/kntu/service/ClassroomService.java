@@ -164,6 +164,7 @@ public class ClassroomService {
 
         Classroom classroom = findByClassroomName(classroomName);
         classroom.getStudents().add(requester);
+        requester.getMyClasses().add(classroom);
 
         return classroom;
     }

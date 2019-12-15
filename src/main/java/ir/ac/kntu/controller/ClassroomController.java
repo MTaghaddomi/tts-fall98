@@ -194,6 +194,7 @@ public class ClassroomController {
             @PathVariable String classroomName) {
         List<ExerciseSubmission> exercises = classroomService
                 .getExercises(classroomName);
+        System.out.println(exercises);
 
         List<ExerciseSubmissionGeneralInfoDTO> exercisesInfo = new ArrayList<>();
         //TODO: use mapper instead
