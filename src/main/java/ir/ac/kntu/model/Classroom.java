@@ -8,6 +8,7 @@ import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,15 +38,15 @@ public class Classroom {
     @JoinTable(name = "ta",
             joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "ta_id", referencedColumnName = "id"))
-    private List<User> assistant;
+    private List<User> assistant = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "participate",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<User> students;
+    private List<User> students = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ExerciseSubmission> exercises;
+    private List<ExerciseSubmission> exercises = new ArrayList<>();
 
 }

@@ -8,6 +8,7 @@ import ir.ac.kntu.model.ExerciseSubmission;
 import ir.ac.kntu.model.Lesson;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.repository.ClassroomRepository;
+import ir.ac.kntu.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class ClassroomService {
 
     @Autowired
     private ClassroomRepository repository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public ClassroomService(ClassroomRepository repository) {
         this.repository = repository;
@@ -49,7 +53,7 @@ public class ClassroomService {
                 .orElseThrow(ClassroomNotFoundException::new);
 
         String requesterUsername = UserService.getUsernameOfRequester();
-        if(! classroom.getTeacher().getUsername().equals(requesterUsername)){
+        if (!classroom.getTeacher().getUsername().equals(requesterUsername)) {
             throw new NotEnoughAccessLevelException();
         }
 
@@ -68,7 +72,7 @@ public class ClassroomService {
         Classroom classroom = findByClassroomName(className);
 
         String requesterUsername = UserService.getUsernameOfRequester();
-        if(! isTeacherIn(requesterUsername, classroom)){
+        if (!isTeacherIn(requesterUsername, classroom)) {
             throw new NotEnoughAccessLevelException();
         }
 
@@ -97,22 +101,22 @@ public class ClassroomService {
         }
     }
 
-    public Classroom getClassroomDetailForRequester(final String classroomName){
+    public Classroom getClassroomDetailForRequester(final String classroomName) {
         Classroom classroom = findByClassroomName(classroomName);
         String requesterUsername = UserService.getUsernameOfRequester();
-        if(isTeacherIn(requesterUsername, classroom) ||
-                isAssistantIn(requesterUsername, classroom)){
+        if (isTeacherIn(requesterUsername, classroom) ||
+                isAssistantIn(requesterUsername, classroom)) {
             return classroom;
-        }else if(isStudentIn(requesterUsername, classroom)){
+        } else if (isStudentIn(requesterUsername, classroom)) {
             return classroom.withStudents(new ArrayList<>());
-        }else{
+        } else {
             return classroom.withStudents(new ArrayList<>()).withAssistant(new ArrayList<>());
         }
     }
 
-    public List<ExerciseSubmission> getExercises(final String classroomName){
+    public List<ExerciseSubmission> getExercises(final String classroomName) {
         //TODO: refactor
-        Classroom classroom =findByClassroomName(classroomName);
+        Classroom classroom = findByClassroomName(classroomName);
         String requesterUsername = UserService.getUsernameOfRequester();
 
         List<ExerciseSubmission> allExercises = classroom.getExercises();
@@ -120,18 +124,18 @@ public class ClassroomService {
         boolean isOrganizer = isTeacherIn(requesterUsername, classroom) ||
                 isAssistantIn(requesterUsername, classroom);
         for (ExerciseSubmission exercise : allExercises) {
-            switch (exercise.getAccessLevel()){
+            switch (exercise.getAccessLevel()) {
                 case ALL_STUDENTS:
                     userExercise.add(exercise);
                     break;
                 case ONLY_CREATOR:
-                    if(exercise.getCreator().getUsername().equals(requesterUsername)){
+                    if (exercise.getCreator().getUsername().equals(requesterUsername)) {
                         userExercise.add(exercise);
                     }
                     break;
 
                 case CLASS_ORGANIZER:
-                    if(isOrganizer){
+                    if (isOrganizer) {
                         userExercise.add(exercise);
                     }
                     break;
@@ -141,20 +145,20 @@ public class ClassroomService {
         return userExercise;
     }
 
-    public boolean isStudentIn(final String requesterUsername, final Classroom classroom){
+    public boolean isStudentIn(final String requesterUsername, final Classroom classroom) {
         return classroom.getStudents().stream()
                 .filter(student -> student.getUsername().equals(requesterUsername))
-                .count()>0;
+                .count() > 0;
     }
 
-    public boolean isTeacherIn(final String requesterUsername, final Classroom classroom){
+    public boolean isTeacherIn(final String requesterUsername, final Classroom classroom) {
         return classroom.getTeacher().getUsername().equals(requesterUsername);
     }
 
-    public boolean isAssistantIn(final String requesterUsername, final Classroom classroom){
+    public boolean isAssistantIn(final String requesterUsername, final Classroom classroom) {
         return classroom.getAssistant().stream()
                 .filter(student -> student.getUsername().equals(requesterUsername))
-                .count()>0;
+                .count() > 0;
     }
 
     public Classroom joinClass(String classroomName) {
@@ -165,6 +169,8 @@ public class ClassroomService {
         Classroom classroom = findByClassroomName(classroomName);
         classroom.getStudents().add(requester);
         requester.getMyClasses().add(classroom);
+        repository.save(classroom);
+        userRepository.save(requester);
 
         return classroom;
     }

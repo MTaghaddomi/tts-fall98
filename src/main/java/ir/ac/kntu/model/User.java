@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -49,5 +50,5 @@ public class User {
     private String phoneNumber;
 
     @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
-    private List<Classroom> myClasses;
+    private List<Classroom> myClasses = new ArrayList<>();
 }
