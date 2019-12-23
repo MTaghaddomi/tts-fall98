@@ -44,4 +44,8 @@ public class ExerciseSubmission {
 
     @ElementCollection(targetClass = String.class)
     private List<String> answersUrl;
+
+    public boolean isCreator(String username){
+        return creator.getUsername().equals(username);
+    }
 }

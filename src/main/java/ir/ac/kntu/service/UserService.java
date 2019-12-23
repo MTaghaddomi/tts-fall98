@@ -9,8 +9,6 @@ import ir.ac.kntu.repository.UserRepository;
 import ir.ac.kntu.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-//import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,9 +24,6 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder bcryptEncode;
-
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -131,44 +126,22 @@ public class UserService implements UserDetailsService {
         User user = findByUsername(username).orElseThrow(UserNotExistedException::new);
 
         userRepository.delete(user);
+
+        //deleteByUsername
+        //userRepository.deleteUserByUsername(username);
+        //TODO: need check if user not exist?
+
         return HttpStatus.OK;
     }
 
-    public List<Classroom> getUserClasses(){
-        String username = getUsernameOfRequester();
-        User user = findByUsername(username).orElseThrow(UserNotExistedException::new);
+    public List<Classroom> getUserClasses(String username){
+        User user = findByUsername(username)
+                .orElseThrow(UserNotExistedException::new);
         return user.getMyClasses();
     }
 
     public Optional<User> findByUsername(final String username){
-        Optional<User> result = Optional.empty();
-
-        //repository should responsible for this, but it does not :|
-        if(username == null){
-            return result;
-        }
-        for(User user : userRepository.findAll()){
-            if(user.getUsername().equals(username)){
-                result = Optional.of(user);
-                break;
-            }
-        }
-        //
-
-        return result;
-    }
-
-    public static String getUsernameOfRequester(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-//            username = principal.toString();
-            username = null;
-        }
-
-        return username;
+        return userRepository.findUserByUsername(username);
     }
 
     @Override

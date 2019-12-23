@@ -9,7 +9,9 @@ import ir.ac.kntu.model.ExerciseSubmission;
 import ir.ac.kntu.model.Lesson;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.service.ClassroomService;
+import ir.ac.kntu.util.UserTokenUtil;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/classrooms")
 public class ClassroomController {
+    @Autowired
     private ClassroomService classroomService;
+
+    @Autowired
+    private UserTokenUtil tokenUtil;
 
     private ClassroomMapper mapper = Mappers.getMapper(ClassroomMapper.class);
 
@@ -59,7 +65,8 @@ public class ClassroomController {
         lesson.setName(registerClassDto.getLesson().getName());
 //        lesson.setDescription(registerClassDto.getLesson().getDescription());
         classroom.setLesson(lesson);
-        //set teacher --> servise
+        User requester = tokenUtil.token2User();
+        classroom.setTeacher(requester);
         //
 
         classroom = classroomService.createClassroom(classroom);
@@ -83,30 +90,27 @@ public class ClassroomController {
         lesson.setName(editClassDto.getLesson().getName());
 //        lesson.setDescription(editClassDto.getLesson().getDescription());
         editClass.setLesson(lesson);
-        List<User> assistants = new ArrayList<>();
         for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
             User user = new User();
             user.setFirstName(userInfoDTO.getFirstName());
             user.setLastName(userInfoDTO.getLastName());
             user.setUsername(userInfoDTO.getEmail());
             user.setEmail(userInfoDTO.getEmail());
-            assistants.add(user);
+            editClass.addAssistant(user);
         }
-        editClass.setAssistant(assistants);
-        List<User> students = new ArrayList<>();
         for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
             User user = new User();
             user.setFirstName(userInfoDTO.getFirstName());
             user.setLastName(userInfoDTO.getLastName());
             user.setUsername(userInfoDTO.getEmail());
             user.setEmail(userInfoDTO.getEmail());
-            students.add(user);
+            editClass.addStudent(user);
         }
-        editClass.setStudents(students);
         //
 
+        String requesterUsername = tokenUtil.token2Username();
         Classroom classroom = classroomService.updateClassroom
-                (classroomName, editClass);
+                (requesterUsername, classroomName, editClass);
 
         ClassroomGeneralInfoDTO result = convertClass2ClassGeneralInfoDTO(classroom);
 
@@ -116,14 +120,16 @@ public class ClassroomController {
     @DeleteMapping("/{classroomName}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteClassroom(@PathVariable String classroomName) {
-        classroomService.deleteClassroom(classroomName);
+        String requesterUsername = tokenUtil.token2Username();
+        classroomService.deleteClassroom(requesterUsername, classroomName);
     }
 
     @GetMapping("/{classroomName}")
     public ClassroomDetailInfoDTO getClassroomDetailInfo(
             @PathVariable String classroomName){
+        String requesterUsername = tokenUtil.token2Username();
         Classroom classroom = classroomService
-                .getClassroomDetailForRequester(classroomName);
+                .getClassroomDetailForRequester(requesterUsername, classroomName);
 
         //TODO: use mapper instead
         ClassroomDetailInfoDTO classroomInfoDTO = new ClassroomDetailInfoDTO();
@@ -156,7 +162,8 @@ public class ClassroomController {
     public ClassroomGeneralInfoDTO joinClass(
             @PathVariable String classroomName){
 
-        Classroom classroom = classroomService.joinClass(classroomName);
+        String requesterUsername = tokenUtil.token2Username();
+        Classroom classroom = classroomService.joinClass(requesterUsername, classroomName);
 
         ClassroomGeneralInfoDTO result = convertClass2ClassGeneralInfoDTO(classroom);
 
@@ -166,8 +173,9 @@ public class ClassroomController {
     @GetMapping("/{classroomName}/exercises")
     public List<ExerciseSubmission> getClassroomExercises(
             @PathVariable String classroomName){
+        String requesterUsername = tokenUtil.token2Username();
         List<ExerciseSubmission> exercises = classroomService
-                .getExercises(classroomName);
+                .getExercises(requesterUsername, classroomName);
 
         List<ExerciseSubmissionGeneralInfoDTO> exercisesInfo = new ArrayList<>();
         //TODO: use mapper instead

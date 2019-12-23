@@ -1,13 +1,12 @@
 package ir.ac.kntu.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.google.common.base.Objects;
+import lombok.*;
 import lombok.experimental.Wither;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,12 +32,14 @@ public class Classroom {
     @OneToOne(cascade = CascadeType.ALL)
     private Lesson lesson;
 
+    @Setter(AccessLevel.NONE)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "ta",
             joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "ta_id", referencedColumnName = "id"))
-    private List<User> assistant;
+    private List<User> assistants;
 
+    @Setter(AccessLevel.NONE)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "participate",
             joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
@@ -48,4 +49,61 @@ public class Classroom {
     @OneToMany(cascade = CascadeType.ALL)
     private List<ExerciseSubmission> exercises;
 
+    public void addAssistant(User assistant){
+        if(this.assistants == null){
+            this.assistants = new ArrayList<>();
+        }
+
+        this.assistants.add(assistant);
+    }
+
+    public void removeAssistant(User assistant){
+        if(this.assistants != null){
+            this.assistants.remove(assistant);
+        }
+    }
+
+    public void removeAllAssistants(){
+        this.assistants = new ArrayList<>();
+    }
+
+    public void addStudent(User student){
+        if(this.students == null){
+            this.students = new ArrayList<>();
+        }
+
+        student.addMeToClass(this);
+        this.students.add(student);
+    }
+
+    public void removeStudent(User student){
+        if(this.students != null){
+            this.students.remove(student);
+            student.removeMeFromClass(this);
+        }
+    }
+
+    public void removeAllStudents(){
+        for(User student : students){
+            student.removeMeFromClass(this);
+        }
+
+        this.students = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Classroom)) return false;
+        Classroom classroom = (Classroom) o;
+        return id == classroom.id &&
+                Objects.equal(name, classroom.name) &&
+                Objects.equal(teacher, classroom.teacher) &&
+                Objects.equal(lesson, classroom.lesson);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name, teacher, lesson);
+    }
 }

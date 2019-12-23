@@ -25,8 +25,8 @@ public class ExerciseSubmissionService {
     private ClassroomService classroomService;
 
 
-    public ExerciseSubmission saveExercise(ExerciseSubmission exercise, String className) {
-        String requesterUsername = userService.getUsernameOfRequester();
+    public ExerciseSubmission saveExercise(
+            String requesterUsername, ExerciseSubmission exercise, String className) {
 
         exercise.setCreator(userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new));
@@ -42,11 +42,16 @@ public class ExerciseSubmissionService {
                 .orElseThrow(ExerciseNotExistedException::new);
     }
 
-    public ExerciseSubmission updateExercise(long exerciseId,
-                                             ExerciseSubmissionRequestDTO exerciseDTO) {
+    public ExerciseSubmission updateExercise(
+            String requesterUsername, long exerciseId,
+            ExerciseSubmissionRequestDTO exerciseDTO) {
 
         ExerciseSubmission exercise = exerciseRepository.findById(exerciseId)
                 .orElseThrow(ExerciseNotExistedException::new);
+
+        if(! exercise.isCreator(requesterUsername)){
+            throw new NotEnoughAccessLevelException();
+        }
 
         exerciseRepository.deleteById(exerciseId);
 
@@ -71,8 +76,7 @@ public class ExerciseSubmissionService {
         return HttpStatus.OK;
     }
 
-    public List<String> getAnswersSubmitted(long exerciseId) {
-        String requesterUsername = userService.getUsernameOfRequester();
+    public List<String> getAnswersSubmitted(String requesterUsername, long exerciseId) {
         ExerciseSubmission exercise = exerciseRepository.findById(exerciseId)
                 .orElseThrow(ExerciseNotExistedException::new);
         Classroom classroom = exercise.getClassroom();
