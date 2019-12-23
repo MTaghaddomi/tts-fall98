@@ -17,14 +17,14 @@ public class LessonMapperTest {
     public void givenLessonToDto_whenMaps_thenCorrect() {
         Lesson lesson = Lesson.builder()
                 .name("Advanced Programming")
-                .description("Java Programming Language")
+//                .description("Java Programming Language")
                 .build();
 
         LessonDto lessonDto = mapper.convertLessonDto(lesson);
         System.out.println(lessonDto);
 
         Assert.assertEquals(lesson.getName(), lesson.getName());
-        Assert.assertEquals(lesson.getDescription(), lesson.getDescription());
+//        Assert.assertEquals(lesson.getDescription(), lesson.getDescription());
     }
 
 }
