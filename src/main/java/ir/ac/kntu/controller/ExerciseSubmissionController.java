@@ -4,6 +4,7 @@ import ir.ac.kntu.domain.submission.ExerciseSubmissionDetailInfoDTO;
 import ir.ac.kntu.domain.submission.ExerciseSubmissionRequestDTO;
 import ir.ac.kntu.model.ExerciseSubmission;
 import ir.ac.kntu.service.ExerciseSubmissionService;
+import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import java.util.List;
 public class ExerciseSubmissionController {
     @Autowired
     private ExerciseSubmissionService exerciseService;
+
+    @Autowired
+    private UserTokenUtil tokenUtil;
 
     @PostMapping("/{classroomName}")
     public ExerciseSubmissionDetailInfoDTO submitExercise(
@@ -33,7 +37,8 @@ public class ExerciseSubmissionController {
         //set classroom --> exerciseService
         //
 
-        exercise = exerciseService.saveExercise(exercise, classroomName);
+        String requesterUsername = tokenUtil.token2Username();
+        exercise = exerciseService.saveExercise(requesterUsername, exercise, classroomName);
 
         ExerciseSubmissionDetailInfoDTO result =
                 convertExercise2exerciseDetailDTO(exercise);
@@ -58,8 +63,10 @@ public class ExerciseSubmissionController {
             @PathVariable(name = "id") Long exerciseId,
             @RequestBody ExerciseSubmissionRequestDTO exerciseDTO){
 
+        String requesterUsername = tokenUtil.token2Username();
+
         ExerciseSubmission exercise = exerciseService.updateExercise
-                (exerciseId, exerciseDTO);
+                (requesterUsername, exerciseId, exerciseDTO);
 
         ExerciseSubmissionDetailInfoDTO result =
                 convertExercise2exerciseDetailDTO(exercise);
@@ -74,7 +81,8 @@ public class ExerciseSubmissionController {
 
     @GetMapping("/{id}/answers")
     public List<String> getSubmittedAnswers(@PathVariable(name = "id") Long exerciseId){
-        return exerciseService.getAnswersSubmitted(exerciseId);
+        String requesterUsername = tokenUtil.token2Username();
+        return exerciseService.getAnswersSubmitted(requesterUsername, exerciseId);
     }
 
 

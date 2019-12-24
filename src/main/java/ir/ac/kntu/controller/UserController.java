@@ -4,6 +4,7 @@ import ir.ac.kntu.domain.classroom.ClassroomGeneralInfoDTO;
 import ir.ac.kntu.domain.user.*;
 import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.service.UserService;
+import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserTokenUtil tokenUtil;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,10 +58,14 @@ public class UserController {
 
     @GetMapping("/myClasses")
     public List<ClassroomGeneralInfoDTO> getMyClasses(){
-        List<Classroom> myClasses = userService.getUserClasses();
+        String requesterUsername = tokenUtil.token2Username();
+        List<Classroom> myClasses = userService.getUserClasses(requesterUsername);
         List<ClassroomGeneralInfoDTO> myClassesDTO = new ArrayList<>();
 
         //TODO: use mapper instead
+        if(myClasses == null){
+            return myClassesDTO;
+        }
         for(Classroom classroom : myClasses){
             String name = classroom.getName();
             String lesson = classroom.getLesson().getName();
