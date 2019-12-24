@@ -4,6 +4,7 @@ import ir.ac.kntu.domain.submission.AnswerSubmissionInfoDTO;
 import ir.ac.kntu.domain.submission.AnswerSubmissionRequestDTO;
 import ir.ac.kntu.model.AnswerSubmission;
 import ir.ac.kntu.service.AnswerSubmissionService;
+import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,9 @@ public class AnswerSubmissionController {
     @Autowired
     private AnswerSubmissionService answerService;
 
+    @Autowired
+    private UserTokenUtil tokenUtil;
+
     @PostMapping("/{exerciseId}")
     public AnswerSubmissionInfoDTO submitAnswer(
             @PathVariable Long exerciseId,
@@ -23,7 +27,8 @@ public class AnswerSubmissionController {
         AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
                 (answerSubmissionRequestDTO);
 
-        answerSubmission = answerService.saveAnswer(exerciseId, answerSubmission);
+        String requesterUsername = tokenUtil.token2Username();
+        answerSubmission = answerService.saveAnswer(requesterUsername, exerciseId, answerSubmission);
 
         return convertAnswer2answerInfoDTO(answerSubmission);
     }
@@ -36,7 +41,8 @@ public class AnswerSubmissionController {
         AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
                 (answerSubmissionRequestDTO);
 
-        answerSubmission = answerService.updateAnswer(answerId, answerSubmission);
+        String requesterUsername = tokenUtil.token2Username();
+        answerSubmission = answerService.updateAnswer(requesterUsername, answerId, answerSubmission);
 
         return convertAnswer2answerInfoDTO(answerSubmission);
 
@@ -44,12 +50,14 @@ public class AnswerSubmissionController {
 
     @DeleteMapping("/{answerId}")
     public HttpStatus deleteAnswer(@PathVariable Long answerId){
-        return answerService.deleteAnswer(answerId);
+        String requesterUsername = tokenUtil.token2Username();
+        return answerService.deleteAnswer(requesterUsername, answerId);
     }
 
     @GetMapping("/{answerId}")
     public AnswerSubmissionInfoDTO getAnswerInfo(@PathVariable Long answerId){
-        AnswerSubmission answer = answerService.getAnswerInfo(answerId);
+        String requesterUsername = tokenUtil.token2Username();
+        AnswerSubmission answer = answerService.getAnswerInfo(requesterUsername, answerId);
 
         return convertAnswer2answerInfoDTO(answer);
     }

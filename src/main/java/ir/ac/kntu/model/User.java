@@ -1,9 +1,7 @@
 package ir.ac.kntu.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.google.common.base.Objects;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -49,6 +47,48 @@ public class User {
 //    @Pattern(regexp = "09\\d{9}")
     private String phoneNumber;
 
-    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
-    private List<Classroom> myClasses = new ArrayList<>();
+    @Setter(AccessLevel.NONE)
+    @ManyToMany(//fetch = FetchType.LAZY,
+            //cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "students")
+    private List<Classroom> myClasses;
+
+    public void addMeToClass(Classroom classroom){
+        if(classroom == null){
+            throw new NullPointerException();
+        }
+
+        if(myClasses == null){
+            myClasses = new ArrayList<>();
+        }
+
+        myClasses.add(classroom);
+    }
+
+    public void removeMeFromClass(Classroom classroom){
+        if(classroom == null){
+            throw new NullPointerException();
+        }
+
+        if(myClasses != null){
+            myClasses.remove(classroom);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equal(firstName, user.firstName) &&
+                Objects.equal(lastName, user.lastName) &&
+                Objects.equal(username, user.username) &&
+                Objects.equal(email, user.email) &&
+                Objects.equal(phoneNumber, user.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(firstName, lastName, username, email, phoneNumber);
+    }
 }

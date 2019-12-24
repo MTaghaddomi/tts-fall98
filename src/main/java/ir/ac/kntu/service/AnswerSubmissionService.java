@@ -22,8 +22,8 @@ public class AnswerSubmissionService {
     @Autowired
     private ExerciseSubmissionService exerciseService;
 
-    public AnswerSubmission saveAnswer(long exerciseId, AnswerSubmission answer) {
-        String requesterUsername = userService.getUsernameOfRequester();
+    public AnswerSubmission saveAnswer(
+            String requesterUsername, long exerciseId, AnswerSubmission answer) {
         User requester = userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new);
         ExerciseSubmission exercise = exerciseService.findExerciseById(exerciseId);
@@ -36,11 +36,12 @@ public class AnswerSubmissionService {
         return answer;
     }
 
-    public AnswerSubmission updateAnswer(long answerId, AnswerSubmission answerSubmission) {
+    public AnswerSubmission updateAnswer(
+            String requesterUsername, long answerId, AnswerSubmission answerSubmission) {
         AnswerSubmission answer = answerRepository.findById(answerId)
                 .orElseThrow(AnswerNotExistedException::new);
 
-        checkAccessLevel(answer);
+        checkAccessLevel(requesterUsername, answer);
 
         answerRepository.deleteById(answerId);
 
@@ -51,28 +52,27 @@ public class AnswerSubmissionService {
         return answer;
     }
 
-    public HttpStatus deleteAnswer(long answerId) {
+    public HttpStatus deleteAnswer(String requesterUsername, long answerId) {
         AnswerSubmission answer = answerRepository.findById(answerId)
                 .orElseThrow(AnswerNotExistedException::new);
 
-        checkAccessLevel(answer);
+        checkAccessLevel(requesterUsername, answer);
 
         answerRepository.deleteById(answerId);
 
         return HttpStatus.OK;
     }
 
-    public AnswerSubmission getAnswerInfo(long answerId) {
+    public AnswerSubmission getAnswerInfo(String requesterUsername, long answerId) {
         AnswerSubmission answer = answerRepository.findById(answerId)
                 .orElseThrow(AnswerNotExistedException::new);
 
-        checkAccessLevel(answer);
+        checkAccessLevel(requesterUsername, answer);
 
         return answer;
     }
 
-    private void checkAccessLevel(AnswerSubmission answer){
-        String requesterUsername = userService.getUsernameOfRequester();
+    private void checkAccessLevel(String requesterUsername, AnswerSubmission answer){
         if(! answer.getCreator().getUsername().equals(requesterUsername)){
             throw new NotEnoughAccessLevelException();
         }
