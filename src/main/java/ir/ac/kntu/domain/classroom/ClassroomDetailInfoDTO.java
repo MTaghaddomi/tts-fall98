@@ -18,5 +18,4 @@ public class ClassroomDetailInfoDTO {
     private LessonDto lesson;
     private UserInfoDTO teacherInfo;
     private List<UserInfoDTO> studentsInfo;//for teacher exist//other null
-    private String role;
 }
