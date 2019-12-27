@@ -160,9 +160,9 @@ public class ClassroomController {
         //
 
         if (requesterUsername.equals(teacher.getUsername())) {
-            classroomInfoDTO.setRequesterRole(UserRole.TEACHER);
+            classroomInfoDTO.setRole(UserRole.TEACHER);
         } else {
-            classroomInfoDTO.setRequesterRole(UserRole.STUDENT);
+            classroomInfoDTO.setRole(UserRole.STUDENT);
         }
 
         return classroomInfoDTO;
