@@ -13,6 +13,8 @@ import ir.ac.kntu.util.UserTokenUtil;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -127,7 +129,7 @@ public class ClassroomController {
     @GetMapping("/{classroomName}")
     public ClassroomDetailInfoDTO getClassroomDetailInfo(
             @PathVariable String classroomName){
-        String requesterUsername = tokenUtil.token2Username();
+        String requesterUsername = getUsernameOfRequester();
         Classroom classroom = classroomService
                 .getClassroomDetailForRequester(requesterUsername, classroomName);
 
@@ -152,8 +154,16 @@ public class ClassroomController {
                         (s.getFirstName(), s.getLastName(), s.getEmail()));
             }
         }
+
+
         classroomInfoDTO.setStudentsInfo(studentsInfo);
         //
+
+        if (requesterUsername.equals(teacher.getUsername())) {
+            classroomInfoDTO.setRequesterRole(UserRole.TEACHER);
+        } else {
+            classroomInfoDTO.setRequesterRole(UserRole.STUDENT);
+        }
 
         return classroomInfoDTO;
     }
@@ -203,5 +213,19 @@ public class ClassroomController {
         //
 
         return result;
+    }
+
+
+    public static String getUsernameOfRequester() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+//            username = principal.toString();
+            username = null;
+        }
+
+        return username;
     }
 }
