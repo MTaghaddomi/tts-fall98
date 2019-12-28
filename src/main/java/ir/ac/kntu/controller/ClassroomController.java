@@ -181,7 +181,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomName}/exercises")
-    public List<ExerciseSubmission> getClassroomExercises(
+    public List<ExerciseSubmissionGeneralInfoDTO> getClassroomExercises(
             @PathVariable String classroomName){
         String requesterUsername = tokenUtil.token2Username();
         List<ExerciseSubmission> exercises = classroomService
@@ -199,7 +199,7 @@ public class ClassroomController {
         }
         //
 
-        return exercises;
+        return exercisesInfo;
     }
 
     private ClassroomGeneralInfoDTO convertClass2ClassGeneralInfoDTO
