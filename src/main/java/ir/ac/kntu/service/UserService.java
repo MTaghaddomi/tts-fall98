@@ -35,6 +35,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
     ClassroomRepository classroomRepository;
 
     public UserSignUpResponseDTO signUp(UserSignUpRequestDTO userDTO)
