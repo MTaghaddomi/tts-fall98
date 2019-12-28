@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 /**
  * @author Morteza Taghaddomi
  */
-@EnableWebMvc
+X@EnableWebMvc
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
