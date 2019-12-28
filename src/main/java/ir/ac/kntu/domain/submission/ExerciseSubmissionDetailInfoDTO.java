@@ -1,6 +1,6 @@
 package ir.ac.kntu.domain.submission;
 
-import ir.ac.kntu.domain.user.UserInfoDTO;
+import ir.ac.kntu.controller.UserRole;
 import ir.ac.kntu.model.ExerciseAccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,4 +29,6 @@ public class ExerciseSubmissionDetailInfoDTO {
     private ExerciseAccessLevel accessLevel;
 
     private List<String> fileUrls;
+
+    private UserRole role;
 }
