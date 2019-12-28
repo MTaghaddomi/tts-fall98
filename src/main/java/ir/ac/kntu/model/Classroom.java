@@ -46,7 +46,7 @@ public class Classroom {
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     private List<User> students;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "")
     private List<ExerciseSubmission> exercises;
 
     public void addAssistant(User assistant){
