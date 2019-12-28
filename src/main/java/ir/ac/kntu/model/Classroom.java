@@ -49,6 +49,16 @@ public class Classroom {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classroom")
     private List<ExerciseSubmission> exercises;
 
+    public void addExercise(ExerciseSubmission exerciseSubmission) {
+        if (exercises == null) {
+            this.exercises = new ArrayList<>();
+        }
+
+        this.exercises.add(exerciseSubmission);
+
+        exerciseSubmission.setClassroom(this);
+    }
+
     public void addAssistant(User assistant){
         if(this.assistants == null){
             this.assistants = new ArrayList<>();

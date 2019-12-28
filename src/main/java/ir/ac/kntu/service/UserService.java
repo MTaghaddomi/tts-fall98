@@ -8,6 +8,7 @@ import ir.ac.kntu.model.User;
 import ir.ac.kntu.repository.ClassroomRepository;
 import ir.ac.kntu.repository.UserRepository;
 import ir.ac.kntu.util.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -143,12 +145,22 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(UserNotExistedException::new);
 
         List<Classroom> myClasses = user.getMyClasses();
-        myClasses.addAll(
-                classroomRepository.findAll().stream()
-                        .filter(
-                                t -> t.getTeacher().getUsername().equals(user.getUsername()))
-                        .collect(Collectors.toList())
-        );
+        log.debug("myclasses" + myClasses);
+        if (myClasses == null) {
+            log.debug("------------>> myclass is null!!!!");
+            myClasses = new ArrayList<>();
+        }
+
+        List<Classroom> findAllClasses = classroomRepository.findAll();
+        if (findAllClasses != null) {
+            myClasses.addAll(
+                    findAllClasses.stream()
+                            .filter(
+                                    t -> t.getTeacher().getUsername().equals(user.getUsername()))
+                            .collect(Collectors.toList())
+            );
+        }
+
 
         return myClasses;
     }
