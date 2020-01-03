@@ -7,12 +7,24 @@ import ir.ac.kntu.model.AnswerSubmission;
 import ir.ac.kntu.model.ExerciseSubmission;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.repository.AnswerSubmissionRepository;
+import ir.ac.kntu.util.FileTransitionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Service
 public class AnswerSubmissionService {
+    private final static String FILE_SEPARATOR = File.separator;
+
+    @Value("${spring.servlet.multipart.location}")
+    private String prefixAddress;
+
     @Autowired
     private AnswerSubmissionRepository answerRepository;
 
@@ -22,6 +34,10 @@ public class AnswerSubmissionService {
     @Autowired
     private ExerciseSubmissionService exerciseService;
 
+    @Autowired
+    private FileTransitionUtil fileUtil;
+
+    @Deprecated
     public AnswerSubmission saveAnswer(
             String requesterUsername, long exerciseId, AnswerSubmission answer) {
         User requester = userService.findByUsername(requesterUsername)
@@ -34,6 +50,43 @@ public class AnswerSubmissionService {
         answer = answerRepository.save(answer);
 
         return answer;
+    }
+
+    public AnswerSubmission saveAnswer(
+            String requesterUsername, long exerciseId, AnswerSubmission answer,
+            MultipartFile[] files) throws IOException {
+
+        User requester = userService.findByUsername(requesterUsername)
+                .orElseThrow(UserNotExistedException::new);
+        ExerciseSubmission exercise = exerciseService.findExerciseById(exerciseId);
+
+        answer.setCreator(requester);
+        answer.setQuestion(exercise);
+
+        if(files != null){
+            String classId = answer.getQuestion().getClassroom().getId() + "";
+            saveFiles(files, requesterUsername, classId, answer);
+        }
+
+        answer = answerRepository.save(answer);
+
+        return answer;
+    }
+
+    private void saveFiles(MultipartFile[] files, String userId, String classId,
+                           AnswerSubmission answer) throws IOException {
+        if(files == null) {
+            return;
+        }
+
+        for(MultipartFile file : files){
+            String folderAddress = getRootFolderOfFiles(userId, classId);
+
+            String fileId = fileUtil.saveFile(file, folderAddress);
+
+            String fileAddress = folderAddress + FILE_SEPARATOR + fileId;
+            answer.addFileUrl(fileAddress);
+        }
     }
 
     public AnswerSubmission updateAnswer(
@@ -76,5 +129,27 @@ public class AnswerSubmissionService {
         if(! answer.getCreator().getUsername().equals(requesterUsername)){
             throw new NotEnoughAccessLevelException();
         }
+    }
+
+    public void copyFileTo(String requesterUsername, OutputStream outputStream,
+                           long answerId) throws IOException {
+        AnswerSubmission answer = answerRepository.findById(answerId)
+                .orElseThrow(AnswerNotExistedException::new);
+
+        String classId = answer.getQuestion().getClassroom().getId() + "";
+
+        String folderAddress = getRootFolderOfFiles(requesterUsername, classId);
+
+        String fileAddress = folderAddress + FILE_SEPARATOR + answerId;
+
+        fileUtil.copyFile(fileAddress, outputStream);
+    }
+
+    private String getRootFolderOfFiles(String userId, String classId){
+        String rootFolderAddress = prefixAddress + FILE_SEPARATOR +
+                "users" + FILE_SEPARATOR + userId + FILE_SEPARATOR +
+                "classes" + FILE_SEPARATOR + classId + FILE_SEPARATOR + "answers";
+
+        return rootFolderAddress;
     }
 }
