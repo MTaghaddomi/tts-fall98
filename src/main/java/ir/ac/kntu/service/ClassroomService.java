@@ -66,7 +66,7 @@ public class ClassroomService {
             throw new NotEnoughAccessLevelException();
         }
 
-        repository.delete(classroom);
+//        repository.delete(classroom);
 
         classroom.setName(editClass.getName());
         classroom.setDescription(editClass.getDescription());

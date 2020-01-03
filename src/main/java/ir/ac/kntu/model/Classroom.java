@@ -116,4 +116,20 @@ public class Classroom {
     public int hashCode() {
         return Objects.hashCode(id, name, teacher, lesson);
     }
+
+    public List<User> getStudents() {
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+        return students;
+    }
+
+    public List<User> getAssistants() {
+        if (assistants == null) {
+            assistants = new ArrayList<>();
+        }
+        return assistants;
+    }
+
+
 }
