@@ -8,6 +8,10 @@ import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -19,6 +23,7 @@ public class AnswerSubmissionController {
     @Autowired
     private UserTokenUtil tokenUtil;
 
+    @Deprecated
     @PostMapping("/{exerciseId}")
     public AnswerSubmissionInfoDTO submitAnswer(
             @PathVariable Long exerciseId,
@@ -29,6 +34,22 @@ public class AnswerSubmissionController {
 
         String requesterUsername = tokenUtil.token2Username();
         answerSubmission = answerService.saveAnswer(requesterUsername, exerciseId, answerSubmission);
+
+        return convertAnswer2answerInfoDTO(answerSubmission);
+    }
+
+    @PostMapping("/{exerciseId}/newApi")
+    public AnswerSubmissionInfoDTO submitAnswer(
+            @PathVariable Long exerciseId,
+            @RequestParam AnswerSubmissionRequestDTO answerSubmissionRequestDTO,
+            @RequestParam MultipartFile[] files) throws IOException {
+
+        AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
+                (answerSubmissionRequestDTO);
+
+        String requesterUsername = tokenUtil.token2Username();
+        answerSubmission = answerService.saveAnswer
+                (requesterUsername, exerciseId, answerSubmission, files);
 
         return convertAnswer2answerInfoDTO(answerSubmission);
     }
@@ -81,5 +102,18 @@ public class AnswerSubmissionController {
         //
 
         return result;
+    }
+
+    @GetMapping("/{id}/newApi")
+    public void sendFileToUser(
+            @PathVariable(name = "id") Long answerId,
+            HttpServletResponse response) throws IOException {
+
+        String requesterUsername = tokenUtil.token2Username();
+
+        answerService.copyFileTo(requesterUsername, response.getOutputStream(), answerId);
+
+        response.addHeader("Content-Disposition",
+                "attachment; filename=" + answerId);
     }
 }

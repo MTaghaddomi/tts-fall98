@@ -8,7 +8,10 @@ import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,7 @@ public class ExerciseSubmissionController {
     @Autowired
     private UserTokenUtil tokenUtil;
 
+    @Deprecated
     @PostMapping("/{classroomName}")
     public ExerciseSubmissionDetailInfoDTO submitExercise(
             @PathVariable String classroomName,
@@ -39,6 +43,33 @@ public class ExerciseSubmissionController {
 
         String requesterUsername = tokenUtil.token2Username();
         exercise = exerciseService.saveExercise(requesterUsername, exercise, classroomName);
+
+        ExerciseSubmissionDetailInfoDTO result =
+                convertExercise2exerciseDetailDTO(exercise);
+
+        return result;
+    }
+
+    @PostMapping("/{classroomName}/newApi")
+    public ExerciseSubmissionDetailInfoDTO submitExercise(
+            @PathVariable String classroomName,
+            @RequestParam ExerciseSubmissionRequestDTO exerciseDTO,
+            @RequestParam MultipartFile[] files) throws IOException {
+
+        //TODO: use mapper instead
+        ExerciseSubmission exercise = new ExerciseSubmission();
+        exercise.setSubject(exerciseDTO.getSubject());
+        exercise.setDescription(exerciseDTO.getDescription());
+        //set creator --> exerciseService
+        exercise.setDeadline(exerciseDTO.getDeadline());
+        exercise.setLateDeadline(exerciseDTO.getLateDeadline());
+        exercise.setAccessLevel(exerciseDTO.getAccessLevel());
+        //set classroom --> exerciseService
+        //
+
+        String requesterUsername = tokenUtil.token2Username();
+        exercise = exerciseService.saveExercise
+                (requesterUsername, exercise, classroomName, files);
 
         ExerciseSubmissionDetailInfoDTO result =
                 convertExercise2exerciseDetailDTO(exercise);
@@ -100,5 +131,19 @@ public class ExerciseSubmissionController {
         //
 
         return result;
+    }
+
+
+    @GetMapping("/{id}/newApi")
+    public void sendFileToUser(
+            @PathVariable(name = "id") Long exerciseId,
+            HttpServletResponse response) throws IOException {
+
+        String requesterUsername = tokenUtil.token2Username();
+
+        exerciseService.copyFileTo(requesterUsername, response.getOutputStream(), exerciseId);
+
+        response.addHeader("Content-Disposition",
+                "attachment; filename=" + exerciseId);
     }
 }
