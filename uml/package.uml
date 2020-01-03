@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ir.ac.kntu</OriginalElement>
+  <nodes>
+    <node x="363.5755483405484" y="269.36783854166663">ir.ac.kntu.util</node>
+    <node x="148.95000000000005" y="361.36783854166663">ir.ac.kntu.service</node>
+    <node x="247.7959343434344" y="15.367838541666629">ir.ac.kntu.model</node>
+    <node x="46.450000000000045" y="157.36783854166663">ir.ac.kntu.repository</node>
+    <node x="0.0" y="616.3678385416666">ir.ac.kntu.domain</node>
+    <node x="251.375" y="503.36783854166663">ir.ac.kntu.config</node>
+    <node x="60.04917388167394" y="269.36783854166663">ir.ac.kntu.Application</node>
+    <node x="294.45000000000005" y="157.36783854166663">ir.ac.kntu.exception</node>
+    <node x="562.5755483405484" y="361.36783854166663">ir.ac.kntu.mapper</node>
+    <node x="472.0" y="503.36783854166663">ir.ac.kntu.controller</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ir.ac.kntu.controller" target="ir.ac.kntu.model">
+      <point x="91.0" y="-16.0" />
+      <point x="667.0" y="483.36783854166663" />
+      <point x="752.0755483405484" y="483.36783854166663" />
+      <point x="752.0755483405484" y="107.36783854166663" />
+      <point x="398.6141161616162" y="107.36783854166663" />
+      <point x="71.81818181818181" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.Application" target="ir.ac.kntu.repository">
+      <point x="0.0" y="-16.0" />
+      <point x="137.04917388167394" y="249.36783854166663" />
+      <point x="150.45000000000005" y="249.36783854166663" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.util" target="ir.ac.kntu.exception">
+      <point x="0.0" y="-16.0" />
+      <point x="437.5755483405484" y="249.36783854166663" />
+      <point x="433.05000000000007" y="249.36783854166663" />
+      <point x="39.60000000000002" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.mapper" target="ir.ac.kntu.mapper">
+      <point x="-21.0" y="16.0" />
+      <point x="625.5755483405484" y="423.36783854166663" />
+      <point x="532.5755483405484" y="423.36783854166663" />
+      <point x="532.5755483405484" y="369.36783854166663" />
+      <point x="-84.0" y="-8.0" />
+    </edge>
+    <edge source="ir.ac.kntu.config" target="ir.ac.kntu.service">
+      <point x="-42.0" y="-16.0" />
+      <point x="293.375" y="483.36783854166663" />
+      <point x="215.70000000000005" y="483.36783854166663" />
+      <point x="-22.25" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.controller" target="ir.ac.kntu.service">
+      <point x="-65.0" y="-16.0" />
+      <point x="511.0" y="463.36783854166663" />
+      <point x="304.70000000000005" y="463.36783854166663" />
+      <point x="66.75" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.controller" target="ir.ac.kntu.controller">
+      <point x="52.0" y="16.0" />
+      <point x="628.0" y="565.3678385416666" />
+      <point x="442.0" y="565.3678385416666" />
+      <point x="442.0" y="511.36783854166663" />
+      <point x="-104.0" y="-8.0" />
+    </edge>
+    <edge source="ir.ac.kntu.controller" target="ir.ac.kntu.mapper">
+      <point x="13.0" y="-16.0" />
+      <point x="589.0" y="453.36783854166663" />
+      <point x="667.5755483405484" y="453.36783854166663" />
+      <point x="21.0" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.service" target="ir.ac.kntu.util">
+      <point x="76.28571428571433" y="-16.0" />
+      <point x="314.2357142857144" y="341.36783854166663" />
+      <point x="388.242215007215" y="341.36783854166663" />
+      <point x="-49.333333333333314" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.model" target="ir.ac.kntu.model">
+      <point x="-71.81818181818181" y="16.0" />
+      <point x="254.97775252525258" y="67.36783854166663" />
+      <point x="227.7959343434344" y="67.36783854166663" />
+      <point x="227.7959343434344" y="42.034505208333314" />
+      <point x="-79.0" y="10.666666666666686" />
+    </edge>
+    <edge source="ir.ac.kntu.service" target="ir.ac.kntu.exception">
+      <point x="50.85714285714289" y="-16.0" />
+      <point x="288.80714285714294" y="331.36783854166663" />
+      <point x="353.0755483405484" y="331.36783854166663" />
+      <point x="353.0755483405484" y="249.36783854166663" />
+      <point x="393.45000000000005" y="249.36783854166663" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.service" target="ir.ac.kntu.model">
+      <point x="-76.28571428571433" y="-16.0" />
+      <point x="161.6642857142857" y="341.36783854166663" />
+      <point x="0.0" y="341.36783854166663" />
+      <point x="0.0" y="107.36783854166663" />
+      <point x="298.06866161616165" y="107.36783854166663" />
+      <point x="-28.727272727272748" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.config" target="ir.ac.kntu.util">
+      <point x="42.0" y="-16.0" />
+      <point x="377.375" y="483.36783854166663" />
+      <point x="437.5755483405484" y="483.36783854166663" />
+      <point x="0.0" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.service" target="ir.ac.kntu.service">
+      <point x="-66.75" y="16.0" />
+      <point x="171.20000000000005" y="413.36783854166663" />
+      <point x="128.95000000000005" y="413.36783854166663" />
+      <point x="128.95000000000005" y="377.36783854166663" />
+      <point x="-89.0" y="-0.0" />
+    </edge>
+    <edge source="ir.ac.kntu.repository" target="ir.ac.kntu.repository">
+      <point x="-83.19999999999999" y="16.0" />
+      <point x="67.25000000000006" y="209.36783854166663" />
+      <point x="26.450000000000045" y="209.36783854166663" />
+      <point x="26.450000000000045" y="173.36783854166663" />
+      <point x="-104.0" y="-0.0" />
+    </edge>
+    <edge source="ir.ac.kntu.service" target="ir.ac.kntu.repository">
+      <point x="0.0" y="-16.0" />
+      <point x="237.95000000000005" y="341.36783854166663" />
+      <point x="224.549173881674" y="341.36783854166663" />
+      <point x="224.549173881674" y="249.36783854166663" />
+      <point x="192.05000000000007" y="249.36783854166663" />
+      <point x="41.60000000000002" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.util" target="ir.ac.kntu.model">
+      <point x="49.333333333333314" y="-16.0" />
+      <point x="486.90888167388164" y="249.36783854166663" />
+      <point x="515.9248051948052" y="249.36783854166663" />
+      <point x="515.9248051948052" y="137.36783854166663" />
+      <point x="355.52320707070714" y="137.36783854166663" />
+      <point x="28.727272727272748" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.repository" target="ir.ac.kntu.model">
+      <point x="52.0" y="-16.0" />
+      <point x="202.45000000000005" y="137.36783854166663" />
+      <point x="341.15957070707077" y="137.36783854166663" />
+      <point x="14.363636363636374" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.util" target="ir.ac.kntu.repository">
+      <point x="-49.333333333333314" y="-16.0" />
+      <point x="388.242215007215" y="229.36783854166663" />
+      <point x="233.64999999999998" y="229.36783854166663" />
+      <point x="83.19999999999993" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.mapper" target="ir.ac.kntu.model">
+      <point x="0.0" y="-16.0" />
+      <point x="646.5755483405484" y="127.36783854166663" />
+      <point x="369.88684343434346" y="127.36783854166663" />
+      <point x="43.090909090909065" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.config" target="ir.ac.kntu.config">
+      <point x="0.0" y="16.0" />
+      <point x="335.375" y="555.3678385416666" />
+      <point x="231.375" y="555.3678385416666" />
+      <point x="231.375" y="519.3678385416666" />
+      <point x="-84.0" y="-0.0" />
+    </edge>
+    <edge source="ir.ac.kntu.controller" target="ir.ac.kntu.exception">
+      <point x="-13.0" y="-16.0" />
+      <point x="563.0" y="443.36783854166663" />
+      <point x="522.0755483405484" y="443.36783854166663" />
+      <point x="522.0755483405484" y="239.36783854166663" />
+      <point x="472.65000000000003" y="239.36783854166663" />
+      <point x="79.19999999999999" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.controller" target="ir.ac.kntu.util">
+      <point x="-39.0" y="-16.0" />
+      <point x="537.0" y="453.36783854166663" />
+      <point x="475.45813852813853" y="453.36783854166663" />
+      <point x="475.45813852813853" y="341.36783854166663" />
+      <point x="486.90888167388164" y="341.36783854166663" />
+      <point x="49.333333333333314" y="16.0" />
+    </edge>
+    <edge source="ir.ac.kntu.exception" target="ir.ac.kntu.exception">
+      <point x="-79.2" y="16.0" />
+      <point x="314.25" y="209.36783854166663" />
+      <point x="274.45000000000005" y="209.36783854166663" />
+      <point x="274.45000000000005" y="173.36783854166663" />
+      <point x="-99.0" y="-0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.7982062780269058" x="376.5" y="324.5" />
+  <SelectedNodes>
+    <node>ir.ac.kntu.domain</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
