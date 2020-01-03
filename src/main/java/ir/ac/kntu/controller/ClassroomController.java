@@ -94,14 +94,17 @@ public class ClassroomController {
         lesson.setName(editClassDto.getLesson().getName());
 //        lesson.setDescription(editClassDto.getLesson().getDescription());
         editClass.setLesson(lesson);
-        for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
-            User user = new User();
-            user.setFirstName(userInfoDTO.getFirstName());
-            user.setLastName(userInfoDTO.getLastName());
-            user.setUsername(userInfoDTO.getEmail());
-            user.setEmail(userInfoDTO.getEmail());
-            editClass.addAssistant(user);
-        }
+
+//        for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
+//            User user = new User();
+//            user.setFirstName(userInfoDTO.getFirstName());
+//            user.setLastName(userInfoDTO.getLastName());
+//            user.setUsername(userInfoDTO.getEmail());
+//            user.setEmail(userInfoDTO.getEmail());
+//            editClass.addAssistant(user);
+//        }
+
+        editClassDto.getStudents().forEach(s -> System.out.println("students: " + s));
         for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
             User user = new User();
             user.setFirstName(userInfoDTO.getFirstName());
@@ -192,14 +195,13 @@ public class ClassroomController {
         List<ExerciseSubmissionGeneralInfoDTO> exercisesInfo = new ArrayList<>();
         //TODO: use mapper instead
         if(exercises == null || exercises.isEmpty()){
-            exercises = null;
+            exercises = new ArrayList<>();
         }else{
             for(ExerciseSubmission exercise : exercises){
                 exercisesInfo.add(new ExerciseSubmissionGeneralInfoDTO
                         (exercise.getId(), exercise.getSubject()));
             }
         }
-        //
 
         return exercisesInfo;
     }
