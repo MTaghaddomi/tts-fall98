@@ -5,6 +5,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,7 @@ public class AnswerSubmission {
 
     private String text;
 
+    @Setter(AccessLevel.NONE)
     @ElementCollection(targetClass = String.class)
     private List<String> fileUrls;
 
@@ -30,4 +32,11 @@ public class AnswerSubmission {
 
     @ManyToOne
     private ExerciseSubmission question;
+
+    public void addFileUrl(String fileUrl){
+        if(fileUrls == null){
+            fileUrls = new ArrayList<>();
+        }
+        fileUrls.add(fileUrl);
+    }
 }
