@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RestController
 @RequestMapping("/classrooms")
+@CrossOrigin
 public class ClassroomController {
     @Autowired
     private ClassroomService classroomService;
