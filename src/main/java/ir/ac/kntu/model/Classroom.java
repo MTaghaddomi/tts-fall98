@@ -46,6 +46,7 @@ public class Classroom {
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     private List<User> students;
 
+    @Setter(AccessLevel.NONE)
     @OneToMany(cascade = CascadeType.ALL)
     private List<ExerciseSubmission> exercises;
 
@@ -89,6 +90,16 @@ public class Classroom {
         }
 
         this.students = new ArrayList<>();
+    }
+
+    public void addExercise(ExerciseSubmission exercise){
+        if(exercise == null){
+            exercises = new ArrayList<>();
+        }
+
+        exercises.add(exercise);
+
+        exercise.setClassroom(this);
     }
 
     @Override

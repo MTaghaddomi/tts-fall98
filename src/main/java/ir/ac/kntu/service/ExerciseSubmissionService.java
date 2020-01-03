@@ -44,7 +44,8 @@ public class ExerciseSubmissionService {
 
         exercise.setCreator(userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new));
-        exercise.setClassroom(classroomService.findByClassroomName(className));
+        Classroom classroom = classroomService.findByClassroomName(className);
+        classroom.addExercise(exercise);
 
         exercise = exerciseRepository.save(exercise);
 
@@ -57,7 +58,8 @@ public class ExerciseSubmissionService {
 
         exercise.setCreator(userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new));
-        exercise.setClassroom(classroomService.findByClassroomName(className));
+        Classroom classroom = classroomService.findByClassroomName(className);
+        classroom.addExercise(exercise);
 
         if(files != null){
             String classId = exercise.getClassroom().getId() + "";
