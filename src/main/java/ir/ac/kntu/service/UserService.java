@@ -144,7 +144,7 @@ public class UserService implements UserDetailsService {
         User user = findByUsername(username)
                 .orElseThrow(UserNotExistedException::new);
 
-        List<Classroom> myClasses = user.getMyClasses();
+        List<Classroom> myClasses = List.copyOf(user.getMyClasses());
         log.debug("myclasses" + myClasses);
         if (myClasses == null) {
             log.debug("------------>> myclass is null!!!!");
@@ -159,11 +159,11 @@ public class UserService implements UserDetailsService {
                     list.add(t);
                 }
             }
-            myClasses.addAll(list);
+            list.addAll(myClasses);
         }
 
 
-        return myClasses;
+        return list;
     }
 
     public Optional<User> findByUsername(final String username) {

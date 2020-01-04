@@ -59,7 +59,9 @@ public class UserController {
     }
 
     @GetMapping("/myClasses")
-    public List<ClassroomGeneralInfoDTO> getMyClasses(){
+    public List<ClassroomGeneralIn foDTO>
+
+    getMyClasses() {
         log.debug("-------> in myclasses controller");
 
         String requesterUsername = tokenUtil.token2Username();

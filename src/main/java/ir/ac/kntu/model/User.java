@@ -32,7 +32,7 @@ public class User {
     @NotBlank
     private String password;
 
-//    @Email
+    //    @Email
     private String email;
 
     private Timestamp createdAt;
@@ -43,34 +43,34 @@ public class User {
 //    @ColumnDefault(value = "1")
 //    private boolean subscribed;
 
-//    @Length(min = 11, max = 11, message = "phone number should has 11 digit")
+    //    @Length(min = 11, max = 11, message = "phone number should has 11 digit")
 //    @Pattern(regexp = "09\\d{9}")
     private String phoneNumber;
 
     @Setter(AccessLevel.NONE)
-    @ManyToMany(//fetch = FetchType.LAZY,
-            //cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             mappedBy = "students")
     private List<Classroom> myClasses;
 
-    public void addMeToClass(Classroom classroom){
-        if(classroom == null){
+    public void addMeToClass(Classroom classroom) {
+        if (classroom == null) {
             throw new NullPointerException();
         }
 
-        if(myClasses == null){
+        if (myClasses == null) {
             myClasses = new ArrayList<>();
         }
 
         myClasses.add(classroom);
     }
 
-    public void removeMeFromClass(Classroom classroom){
-        if(classroom == null){
+    public void removeMeFromClass(Classroom classroom) {
+        if (classroom == null) {
             throw new NullPointerException();
         }
 
-        if(myClasses != null){
+        if (myClasses != null) {
             myClasses.remove(classroom);
         }
     }
