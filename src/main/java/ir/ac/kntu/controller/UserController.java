@@ -76,4 +76,11 @@ public class UserController {
 
         return myClassesDTO;
     }
+
+    //TODO: ask front
+    @PostMapping("/shouldChange")
+    public void uploadProfilePicture(){}
+
+    @GetMapping("/shouldChange")
+    public void downloadProfilePicture(){}
 }

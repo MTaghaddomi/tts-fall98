@@ -57,6 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/users").permitAll()//sign-up
                 .antMatchers("/users/login").permitAll()//sign-in
                 .antMatchers("/").permitAll()//sign-in
+                .antMatchers("/file/exercise/alaki").permitAll()
                 .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
