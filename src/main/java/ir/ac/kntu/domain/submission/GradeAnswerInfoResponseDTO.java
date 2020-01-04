@@ -5,10 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerSubmissionRequestDTO {
+@Builder
+public class GradeAnswerInfoResponseDTO {
+    private long id;
+
     private String text;
+
+    private double grade;
 }
