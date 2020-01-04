@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -154,12 +153,13 @@ public class UserService implements UserDetailsService {
 
         List<Classroom> findAllClasses = classroomRepository.findAll();
         if (findAllClasses != null) {
-            myClasses.addAll(
-                    findAllClasses.stream()
-                            .filter(
-                                    t -> t.getTeacher().getUsername().equals(user.getUsername()))
-                            .collect(Collectors.toList())
-            );
+            List<Classroom> list = new ArrayList<>();
+            for (Classroom t : findAllClasses) {
+                if (t.getTeacher().getUsername().equals(user.getUsername())) {
+                    list.add(t);
+                }
+            }
+            myClasses.addAll(list);
         }
 
 
