@@ -182,7 +182,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomName}/exercises")
-    public List<ExerciseSubmission> getClassroomExercises(
+    public List<ExerciseSubmissionGeneralInfoDTO> getClassroomExercises(
             @PathVariable String classroomName){
         String requesterUsername = tokenUtil.token2Username();
         List<ExerciseSubmission> exercises = classroomService
@@ -191,7 +191,7 @@ public class ClassroomController {
         List<ExerciseSubmissionGeneralInfoDTO> exercisesInfo = new ArrayList<>();
         //TODO: use mapper instead
         if(exercises == null || exercises.isEmpty()){
-            exercises = null;
+            exercises = new ArrayList<>();
         }else{
             for(ExerciseSubmission exercise : exercises){
                 exercisesInfo.add(new ExerciseSubmissionGeneralInfoDTO
@@ -200,7 +200,7 @@ public class ClassroomController {
         }
         //
 
-        return exercises;
+        return exercisesInfo;
     }
 
     private ClassroomGeneralInfoDTO convertClass2ClassGeneralInfoDTO
