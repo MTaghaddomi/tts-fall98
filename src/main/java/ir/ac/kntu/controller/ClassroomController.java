@@ -13,18 +13,14 @@ import ir.ac.kntu.util.UserTokenUtil;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("/classrooms")
-@CrossOrigin
 public class ClassroomController {
     @Autowired
     private ClassroomService classroomService;
@@ -94,24 +90,25 @@ public class ClassroomController {
         lesson.setName(editClassDto.getLesson().getName());
 //        lesson.setDescription(editClassDto.getLesson().getDescription());
         editClass.setLesson(lesson);
-
-//        for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
-//            User user = new User();
-//            user.setFirstName(userInfoDTO.getFirstName());
-//            user.setLastName(userInfoDTO.getLastName());
-//            user.setUsername(userInfoDTO.getEmail());
-//            user.setEmail(userInfoDTO.getEmail());
-//            editClass.addAssistant(user);
-//        }
-
-        editClassDto.getStudents().forEach(s -> System.out.println("students: " + s));
-        for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
-            User user = new User();
-            user.setFirstName(userInfoDTO.getFirstName());
-            user.setLastName(userInfoDTO.getLastName());
-            user.setUsername(userInfoDTO.getEmail());
-            user.setEmail(userInfoDTO.getEmail());
-            editClass.addStudent(user);
+        if(editClassDto.getAssistant() != null){
+            for(UserInfoDTO userInfoDTO : editClassDto.getAssistant()){
+                User user = new User();
+                user.setFirstName(userInfoDTO.getFirstName());
+                user.setLastName(userInfoDTO.getLastName());
+                user.setUsername(userInfoDTO.getEmail());
+                user.setEmail(userInfoDTO.getEmail());
+                editClass.addAssistant(user);
+            }
+        }
+        if(editClassDto.getStudents() != null){
+            for(UserInfoDTO userInfoDTO : editClassDto.getStudents()){
+                User user = new User();
+                user.setFirstName(userInfoDTO.getFirstName());
+                user.setLastName(userInfoDTO.getLastName());
+                user.setUsername(userInfoDTO.getEmail());
+                user.setEmail(userInfoDTO.getEmail());
+                editClass.addStudent(user);
+            }
         }
         //
 
@@ -134,7 +131,7 @@ public class ClassroomController {
     @GetMapping("/{classroomName}")
     public ClassroomDetailInfoDTO getClassroomDetailInfo(
             @PathVariable String classroomName){
-        String requesterUsername = getUsernameOfRequester();
+        String requesterUsername = tokenUtil.token2Username();
         Classroom classroom = classroomService
                 .getClassroomDetailForRequester(requesterUsername, classroomName);
 
@@ -159,16 +156,8 @@ public class ClassroomController {
                         (s.getFirstName(), s.getLastName(), s.getEmail()));
             }
         }
-
-
         classroomInfoDTO.setStudentsInfo(studentsInfo);
         //
-
-        if (requesterUsername.equals(teacher.getUsername())) {
-            classroomInfoDTO.setRole(UserRole.teacher);
-        } else {
-            classroomInfoDTO.setRole(UserRole.student);
-        }
 
         return classroomInfoDTO;
     }
@@ -186,7 +175,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomName}/exercises")
-    public List<ExerciseSubmissionGeneralInfoDTO> getClassroomExercises(
+    public List<ExerciseSubmission> getClassroomExercises(
             @PathVariable String classroomName){
         String requesterUsername = tokenUtil.token2Username();
         List<ExerciseSubmission> exercises = classroomService
@@ -195,15 +184,16 @@ public class ClassroomController {
         List<ExerciseSubmissionGeneralInfoDTO> exercisesInfo = new ArrayList<>();
         //TODO: use mapper instead
         if(exercises == null || exercises.isEmpty()){
-            exercises = new ArrayList<>();
+            exercises = null;
         }else{
             for(ExerciseSubmission exercise : exercises){
                 exercisesInfo.add(new ExerciseSubmissionGeneralInfoDTO
                         (exercise.getId(), exercise.getSubject()));
             }
         }
+        //
 
-        return exercisesInfo;
+        return exercises;
     }
 
     private ClassroomGeneralInfoDTO convertClass2ClassGeneralInfoDTO
@@ -217,19 +207,5 @@ public class ClassroomController {
         //
 
         return result;
-    }
-
-
-    public static String getUsernameOfRequester() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-//            username = principal.toString();
-            username = null;
-        }
-
-        return username;
     }
 }
