@@ -144,22 +144,16 @@ public class UserService implements UserDetailsService {
         User user = findByUsername(username)
                 .orElseThrow(UserNotExistedException::new);
 
-        List<Classroom> myClasses = user.getMyClasses();
-        log.debug("myclasses" + myClasses);
-        if (myClasses == null) {
-            log.debug("------------>> myclass is null!!!!");
-            myClasses = new ArrayList<>();
-        }
+        List<Classroom> myClasses = new ArrayList<>();
+        myClasses.addAll(user.getMyClasses());
 
         List<Classroom> findAllClasses = classroomRepository.findAll();
         if (findAllClasses != null) {
-            List<Classroom> list = new ArrayList<>();
             for (Classroom t : findAllClasses) {
-                if (t.getTeacher().getUsername().equals(user.getUsername())) {
-                    list.add(t);
+                if (t.getTeacher().getUsername().equals(username)) {
+                    myClasses.add(t);
                 }
             }
-            myClasses.addAll(list);
         }
 
 

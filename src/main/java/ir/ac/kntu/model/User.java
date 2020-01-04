@@ -2,6 +2,7 @@ package ir.ac.kntu.model;
 
 import com.google.common.base.Objects;
 import lombok.*;
+import lombok.experimental.Wither;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -52,6 +53,10 @@ public class User {
             //cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             mappedBy = "students")
     private List<Classroom> myClasses;
+
+    public List<Classroom> getMyClasses() {
+        return myClasses==null ? new ArrayList<>() : myClasses;
+    }
 
     public void addMeToClass(Classroom classroom){
         if(classroom == null){
