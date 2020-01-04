@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AnswerSubmissionService {
     @Autowired
@@ -77,4 +79,12 @@ public class AnswerSubmissionService {
             throw new NotEnoughAccessLevelException();
         }
     }
+
+    public List<AnswerSubmission> findAllAnswerSubmissionByExerciseId(long exerciseId) {
+        List<AnswerSubmission> answerSubmissions = answerRepository.findAllByQuestionId(exerciseId);
+        return answerSubmissions;
+    }
+
+
+
 }

@@ -14,5 +14,13 @@ public class AnswerSubmissionInfoDTO {
 
     private String text;
 
+    private UserInfoDTO creator;
+
     private List<String> fileUrls;
+
+    public AnswerSubmissionInfoDTO(long id, String text, List<String> fileUrls) {
+        this.id = id;
+        this.text = text;
+        this.fileUrls = fileUrls;
+    }
 }

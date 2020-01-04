@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerSubmission {
@@ -17,6 +18,8 @@ public class AnswerSubmission {
     private long id;
 
     private String text;
+
+    private double grade;
 
     @ElementCollection(targetClass = String.class)
     private List<String> fileUrls;
@@ -28,6 +31,6 @@ public class AnswerSubmission {
     @ManyToOne
     private User creator;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ExerciseSubmission question;
 }

@@ -2,7 +2,6 @@ package ir.ac.kntu.service;
 
 import ir.ac.kntu.exception.ClassroomNotFoundException;
 import ir.ac.kntu.exception.NotEnoughAccessLevelException;
-import ir.ac.kntu.exception.TeacherNotAllowJoinHisClass;
 import ir.ac.kntu.exception.UserNotExistedException;
 import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.model.ExerciseSubmission;
@@ -43,7 +42,7 @@ public class ClassroomService {
         Classroom classroom = repository.findClassroomByName(className)
                 .orElseThrow(ClassroomNotFoundException::new);
 
-        if (!classroom.getTeacher().getUsername().equals(requesterUsername)) {
+        if(! classroom.getTeacher().getUsername().equals(requesterUsername)){
             throw new NotEnoughAccessLevelException();
         }
 
@@ -62,11 +61,11 @@ public class ClassroomService {
                                      String className, Classroom editClass) {
         Classroom classroom = findByClassroomName(className);
 
-        if (!isTeacherIn(requesterUsername, classroom)) {
+        if(! isTeacherIn(requesterUsername, classroom)){
             throw new NotEnoughAccessLevelException();
         }
 
-//        repository.delete(classroom);
+        repository.delete(classroom);
 
         classroom.setName(editClass.getName());
         classroom.setDescription(editClass.getDescription());
@@ -75,13 +74,17 @@ public class ClassroomService {
 //        lesson.setDescription(editClass.getLesson().getDescription());
 
         classroom.removeAllAssistants();
-        for (User assistant : editClass.getAssistants()) {
-            classroom.addAssistant(assistant);
+        if(editClass.getAssistants() != null){
+            for(User assistant : editClass.getAssistants()){
+                classroom.addAssistant(assistant);
+            }
         }
 
         classroom.removeAllStudents();
-        for (User student : editClass.getStudents()) {
-            classroom.addStudent(student);
+        if(editClass.getStudents() != null){
+            for(User student : editClass.getStudents()){
+                classroom.addStudent(student);
+            }
         }
 
         return repository.save(classroom);
@@ -95,45 +98,45 @@ public class ClassroomService {
     public List<Classroom> searchClassroom(String name, String lessonName) {
         if (name != null) {
             return searchClassroomByNameContains(name);
-        } else if (lessonName != null) {
+        } else if(lessonName != null){
             return findByLessonName(lessonName);
-        } else {
+        } else{
             return new ArrayList<>();
         }
     }
 
     public Classroom getClassroomDetailForRequester(
-            String requesterUsername, final String classroomName) {
+            String requesterUsername, final String classroomName){
         Classroom classroom = findByClassroomName(classroomName);
 
-        if (isTeacherIn(requesterUsername, classroom) ||
-                isAssistantIn(requesterUsername, classroom)) {
+        if(isTeacherIn(requesterUsername, classroom) ||
+                isAssistantIn(requesterUsername, classroom)){
             return classroom;
-        } else if (isStudentIn(requesterUsername, classroom)) {
+        }else if(isStudentIn(requesterUsername, classroom)){
             return classroom.withStudents(null);
-        } else {
+        }else{
             return classroom.withStudents(null).withAssistants(null);
         }
     }
 
     public List<ExerciseSubmission> getExercises(
-            String requesterUsername, final String classroomName) {
-        Classroom classroom = findByClassroomName(classroomName);
+            String requesterUsername, final String classroomName){
+        Classroom classroom =findByClassroomName(classroomName);
 
         List<ExerciseSubmission> allExercises = classroom.getExercises();
         List<ExerciseSubmission> userExercise = new ArrayList<>();
         allExercises.stream().forEach(exercise -> {
-            switch (exercise.getAccessLevel()) {
+            switch (exercise.getAccessLevel()){
                 case ALL_STUDENTS:
                     userExercise.add(exercise);
                     break;
                 case ONLY_CREATOR:
-                    if (exercise.isCreator(requesterUsername)) {
+                    if(exercise.isCreator(requesterUsername)){
                         userExercise.add(exercise);
                     }
                     break;
                 case CLASS_ORGANIZER:
-                    if (isOrganizer(requesterUsername, classroom)) {
+                    if(isOrganizer(requesterUsername, classroom)){
                         userExercise.add(exercise);
                     }
                     break;
@@ -143,24 +146,24 @@ public class ClassroomService {
         return userExercise;
     }
 
-    public boolean isStudentIn(final String requesterUsername, final Classroom classroom) {
-        return classroom.getStudents() != null && classroom.getStudents().stream()
+    public boolean isStudentIn(final String requesterUsername, final Classroom classroom){
+        return classroom.getStudents()!=null && classroom.getStudents().stream()
                 .filter(student -> student.getUsername().equals(requesterUsername))
-                .count() > 0;
+                .count()>0;
     }
 
-    public boolean isTeacherIn(final String requesterUsername, final Classroom classroom) {
-        return classroom.getTeacher() != null && classroom.getTeacher().getUsername().equals(requesterUsername);
+    public boolean isTeacherIn(final String requesterUsername, final Classroom classroom){
+        return classroom.getTeacher()!=null && classroom.getTeacher().getUsername().equals(requesterUsername);
     }
 
-    public boolean isAssistantIn(final String requesterUsername, final Classroom classroom) {
-        return classroom.getAssistants() != null && classroom.getAssistants().stream()
+    public boolean isAssistantIn(final String requesterUsername, final Classroom classroom){
+        return classroom.getAssistants()!=null && classroom.getAssistants().stream()
                 .filter(student -> student.getUsername().equals(requesterUsername))
-                .count() > 0;
+                .count()>0;
     }
 
     private boolean isOrganizer(final String requesterUsername,
-                                final Classroom classroom) {
+                                final Classroom classroom){
         return isTeacherIn(requesterUsername, classroom) ||
                 isAssistantIn(requesterUsername, classroom);
     }
@@ -169,11 +172,7 @@ public class ClassroomService {
         User requester = userService.findByUsername(requesterUsername)
                 .orElseThrow(UserNotExistedException::new);
 
-
         Classroom classroom = findByClassroomName(classroomName);
-        if (requesterUsername.equals(classroom.getTeacher().getUsername())) {
-            throw new TeacherNotAllowJoinHisClass();
-        }
 
         classroom.addStudent(requester);
         repository.save(classroom);
