@@ -152,8 +152,8 @@ public class UserService implements UserDetailsService {
         }
 
         List<Classroom> findAllClasses = classroomRepository.findAll();
+        List<Classroom> list = new ArrayList<>();
         if (findAllClasses != null) {
-            List<Classroom> list = new ArrayList<>();
             for (Classroom t : findAllClasses) {
                 if (t.getTeacher().getUsername().equals(user.getUsername())) {
                     list.add(t);
