@@ -149,7 +149,7 @@ public class ClassroomController {
         List<User> students = classroom.getStudents();
         List<UserInfoDTO> studentsInfo;
         if(students == null || students.isEmpty()){
-            studentsInfo = null;
+            studentsInfo = new ArrayList<>();
         }else{
             studentsInfo = new ArrayList<>();
             for(User s : students){
