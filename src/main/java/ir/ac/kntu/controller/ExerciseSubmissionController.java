@@ -3,6 +3,7 @@ package ir.ac.kntu.controller;
 import ir.ac.kntu.domain.submission.ExerciseSubmissionDetailInfoDTO;
 import ir.ac.kntu.domain.submission.ExerciseSubmissionRequestDTO;
 import ir.ac.kntu.model.ExerciseSubmission;
+import ir.ac.kntu.service.ClassroomService;
 import ir.ac.kntu.service.ExerciseSubmissionService;
 import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,14 @@ public class ExerciseSubmissionController {
     @Autowired
     private UserTokenUtil tokenUtil;
 
+    @Autowired
+    ClassroomService classroomService;
+
     @Deprecated
     @PostMapping("/{classroomName}")
     public ExerciseSubmissionDetailInfoDTO submitExercise(
             @PathVariable String classroomName,
-            @RequestBody ExerciseSubmissionRequestDTO exerciseDTO){
+            @RequestBody ExerciseSubmissionRequestDTO exerciseDTO) {
 
         //TODO: use mapper instead
         ExerciseSubmission exercise = new ExerciseSubmission();
@@ -79,20 +83,28 @@ public class ExerciseSubmissionController {
 
     @GetMapping("/{id}")
     public ExerciseSubmissionDetailInfoDTO getExerciseDetailInfo(
-            @PathVariable(name = "id") Long exerciseId){
+            @PathVariable(name = "id") Long exerciseId) {
 
         ExerciseSubmission exercise = exerciseService.findExerciseById(exerciseId);
 
         ExerciseSubmissionDetailInfoDTO result =
                 convertExercise2exerciseDetailDTO(exercise);
 
+        String requesterUsername = tokenUtil.token2Username();
+        boolean isTeacher = classroomService.isTeacherIn(requesterUsername, exercise.getClassroom());
+
+        if (isTeacher) {
+            result.setRole(UserRole.teacher);
+        } else {
+            result.setRole(UserRole.student);
+        }
         return result;
     }
 
     @PutMapping("/{id}")
     public ExerciseSubmissionDetailInfoDTO updateExercise(
             @PathVariable(name = "id") Long exerciseId,
-            @RequestBody ExerciseSubmissionRequestDTO exerciseDTO){
+            @RequestBody ExerciseSubmissionRequestDTO exerciseDTO) {
 
         String requesterUsername = tokenUtil.token2Username();
 
@@ -106,19 +118,19 @@ public class ExerciseSubmissionController {
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteExercise(@PathVariable(name = "id") Long exerciseId){
+    public HttpStatus deleteExercise(@PathVariable(name = "id") Long exerciseId) {
         return exerciseService.deleteExerciseById(exerciseId);
     }
 
     @GetMapping("/{id}/answers")
-    public List<String> getSubmittedAnswers(@PathVariable(name = "id") Long exerciseId){
+    public List<String> getSubmittedAnswers(@PathVariable(name = "id") Long exerciseId) {
         String requesterUsername = tokenUtil.token2Username();
         return exerciseService.getAnswersSubmitted(requesterUsername, exerciseId);
     }
 
 
     private ExerciseSubmissionDetailInfoDTO convertExercise2exerciseDetailDTO
-            (ExerciseSubmission exercise){
+            (ExerciseSubmission exercise) {
         //TODO: use mapper instead
         ExerciseSubmissionDetailInfoDTO result = new ExerciseSubmissionDetailInfoDTO();
         result.setId(exercise.getId());

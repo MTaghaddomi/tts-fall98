@@ -41,7 +41,8 @@ public class ExerciseSubmission {
 
     private ExerciseAccessLevel accessLevel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classroom_id")
     private Classroom classroom;
 
     @ElementCollection(targetClass = String.class)

@@ -74,13 +74,17 @@ public class ClassroomService {
 //        lesson.setDescription(editClass.getLesson().getDescription());
 
         classroom.removeAllAssistants();
-        for(User assistant : editClass.getAssistants()){
-            classroom.addAssistant(assistant);
+        if(editClass.getAssistants() != null){
+            for(User assistant : editClass.getAssistants()){
+                classroom.addAssistant(assistant);
+            }
         }
 
         classroom.removeAllStudents();
-        for(User student : editClass.getStudents()){
-            classroom.addStudent(student);
+        if(editClass.getStudents() != null){
+            for(User student : editClass.getStudents()){
+                classroom.addStudent(student);
+            }
         }
 
         return repository.save(classroom);

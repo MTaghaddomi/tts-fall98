@@ -24,7 +24,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtEntryPoint jwtEntryPoint;
 
@@ -65,14 +65,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .and().exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-            
+
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://frontesh-static.herokuapp.com", "http://172.20.10.5:8080"));
+
+//        configuration.setAllowedOrigins(Arrays.asList("https://frontesh-static.herokuapp.com"));
 //        configuration.setAllowedOrigins(Arrays.asList("system-analysis-design.herokuapp.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

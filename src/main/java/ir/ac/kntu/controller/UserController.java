@@ -5,6 +5,7 @@ import ir.ac.kntu.domain.user.*;
 import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.service.UserService;
 import ir.ac.kntu.util.UserTokenUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(maxAge = 3600)
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
@@ -58,12 +60,15 @@ public class UserController {
 
     @GetMapping("/myClasses")
     public List<ClassroomGeneralInfoDTO> getMyClasses(){
+        log.debug("-------> in myclasses controller");
+
         String requesterUsername = tokenUtil.token2Username();
         List<Classroom> myClasses = userService.getUserClasses(requesterUsername);
-        List<ClassroomGeneralInfoDTO> myClassesDTO = new ArrayList<>();
 
         //TODO: use mapper instead
+        List<ClassroomGeneralInfoDTO> myClassesDTO = new ArrayList<>();
         if(myClasses == null){
+            log.debug("-------> myclasses was null");
             return myClassesDTO;
         }
         for(Classroom classroom : myClasses){

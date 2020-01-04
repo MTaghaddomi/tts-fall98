@@ -50,6 +50,16 @@ public class Classroom {
     @OneToMany(cascade = CascadeType.ALL)
     private List<ExerciseSubmission> exercises;
 
+    public void addExercise(ExerciseSubmission exerciseSubmission) {
+        if (exercises == null) {
+            this.exercises = new ArrayList<>();
+        }
+
+        this.exercises.add(exerciseSubmission);
+
+        exerciseSubmission.setClassroom(this);
+    }
+
     public void addAssistant(User assistant){
         if(this.assistants == null){
             this.assistants = new ArrayList<>();
@@ -92,16 +102,6 @@ public class Classroom {
         this.students = new ArrayList<>();
     }
 
-    public void addExercise(ExerciseSubmission exercise){
-        if(exercise == null){
-            exercises = new ArrayList<>();
-        }
-
-        exercises.add(exercise);
-
-        exercise.setClassroom(this);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,4 +117,20 @@ public class Classroom {
     public int hashCode() {
         return Objects.hashCode(id, name, teacher, lesson);
     }
+
+    public List<User> getStudents() {
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+        return students;
+    }
+
+    public List<User> getAssistants() {
+        if (assistants == null) {
+            assistants = new ArrayList<>();
+        }
+        return assistants;
+    }
+
+
 }
