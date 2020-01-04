@@ -23,8 +23,11 @@ public class ExerciseFileController {
 
     @PostMapping("/alaki")
     public String alaki(
+            @RequestParam String textstr,
             @RequestParam("file") MultipartFile file) throws IOException {
 
+        System.out.print("----------------->>>>>>>>>>");
+        System.out.println(textstr);
         String fileId = exerciseFileService.alaki(file);
 
         return fileId;
@@ -35,8 +38,10 @@ public class ExerciseFileController {
         String fileName = exerciseFileService.alaki(response.getOutputStream());
 
 //        response.setContentType("application/text");
+//        response.setContentType(MediaType.TEXT_PLAIN_VALUE);
+//        response.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
 //        response.setContentType("application/picture");
-        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+//        response.setContentType(MediaType.IMAGE_PNG_VALUE);
 //        response.setContentType("application/pdf");////todo
 //        response.setContentType(MediaType.APPLICATION_PDF);////todo
 //        response.addHeader(new HttpHeaders());

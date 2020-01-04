@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -40,7 +41,9 @@ public class ExerciseFileService {
     }
 
     public String alaki(OutputStream outputStream) throws IOException {
-        String filePath = "F:\\term5_981\\SystemAnalyzeAndDesign\\project\\backend\\tts-fall98\\src\\main\\resources\\dynamic\\temp\\fileAlaki.PNG";
+//        String fileName = "alaki.txt";
+        String fileName = "alaki.png";
+        String filePath = "F:\\term5_981\\SystemAnalyzeAndDesign\\project\\backend\\tts-fall98\\src\\main\\resources\\dynamic\\temp\\" + fileName;
         Path path = Paths.get(filePath);
 
         if (path != null) {
