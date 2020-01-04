@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Arrays;
 import java.util.List;
 
-// @ControllerAdvice
+@ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     static class ExceptionMessage {
         String message;

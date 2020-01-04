@@ -3,6 +3,7 @@ package ir.ac.kntu.controller;
 import ir.ac.kntu.domain.submission.ExerciseSubmissionDetailInfoDTO;
 import ir.ac.kntu.domain.submission.ExerciseSubmissionRequestDTO;
 import ir.ac.kntu.model.ExerciseSubmission;
+import ir.ac.kntu.service.ClassroomService;
 import ir.ac.kntu.service.ExerciseSubmissionService;
 import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ExerciseSubmissionController {
 
     @Autowired
     private UserTokenUtil tokenUtil;
+
+    @Autowired
+    ClassroomService classroomService;
 
     @Deprecated
     @PostMapping("/{classroomName}")
@@ -86,6 +90,14 @@ public class ExerciseSubmissionController {
         ExerciseSubmissionDetailInfoDTO result =
                 convertExercise2exerciseDetailDTO(exercise);
 
+        String requesterUsername = tokenUtil.token2Username();
+        boolean isTeacher = classroomService.isTeacherIn(requesterUsername, exercise.getClassroom());
+
+        if (isTeacher) {
+            result.setRole(UserRole.teacher);
+        } else {
+            result.setRole(UserRole.student);
+        }
         return result;
     }
 

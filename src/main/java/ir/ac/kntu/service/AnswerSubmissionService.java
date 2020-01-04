@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.util.List;
+
 @Service
 public class AnswerSubmissionService {
     private final static String FILE_SEPARATOR = File.separator;
@@ -152,4 +154,12 @@ public class AnswerSubmissionService {
 
         return rootFolderAddress;
     }
+
+    public List<AnswerSubmission> findAllAnswerSubmissionByExerciseId(long exerciseId) {
+        List<AnswerSubmission> answerSubmissions = answerRepository.findAllByQuestionId(exerciseId);
+        return answerSubmissions;
+    }
+
+
+
 }
