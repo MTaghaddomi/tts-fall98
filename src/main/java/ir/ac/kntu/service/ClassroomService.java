@@ -174,6 +174,11 @@ public class ClassroomService {
 
         Classroom classroom = findByClassroomName(classroomName);
 
+        if (classroom.getTeacher().getUsername().equals(requesterUsername)) {
+            throw new JoinClassroomException();
+        }
+
+
         classroom.addStudent(requester);
         repository.save(classroom);
 
