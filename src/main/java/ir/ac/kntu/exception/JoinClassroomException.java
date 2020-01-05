@@ -1,4 +1,4 @@
-package ir.ac.kntu.service;
+package ir.ac.kntu.exception;
 
 /**
  * @author Morteza Taghaddomi
