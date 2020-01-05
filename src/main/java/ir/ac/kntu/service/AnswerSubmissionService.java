@@ -87,8 +87,10 @@ public class AnswerSubmissionService {
         answer.setQuestion(exercise);
 
         if(file != null){
+            System.out.println("answer service, before save");
             String classId = answer.getQuestion().getClassroom().getId() + "";
-            saveFile(file, requesterUsername, classId, answer);
+            saveFile(file, requesterUsername, classId, answer, exercise);
+            System.out.println("answer service, before save");
         }
 
         answer = answerRepository.save(answer);
@@ -113,7 +115,7 @@ public class AnswerSubmissionService {
     }
 
     private void saveFile(MultipartFile file, String userId, String classId,
-                           AnswerSubmission answer) throws IOException {
+                           AnswerSubmission answer, ExerciseSubmission exercise) throws IOException {
         if(file == null) {
             return;
         }
@@ -123,7 +125,16 @@ public class AnswerSubmissionService {
         String fileId = fileUtil.saveFile(file, folderAddress);
 
         String fileAddress = folderAddress + FILE_SEPARATOR + fileId;
+        System.out.println("answer service, save method, line 128");
+        System.out.println("before, answer urls: " + answer.getFileUrls());
         answer.addFileUrl(fileAddress);
+        System.out.println("after, answer urls: " + answer.getFileUrls());
+
+        System.out.println("answer service, save method, line 128");
+        System.out.println("before, exercise's answer urls: " + exercise.getAnswersUrl());
+        exercise.addAnswerUrl(fileAddress);
+        System.out.println("after, exercise's answer urls: " + exercise.getAnswersUrl());
+        System.out.println("answer service, save method, line 128");
     }
 
     public AnswerSubmission updateAnswer(

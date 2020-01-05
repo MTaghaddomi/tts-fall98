@@ -144,7 +144,8 @@ public class UserService implements UserDetailsService {
         User user = findByUsername(username)
                 .orElseThrow(UserNotExistedException::new);
 
-        List<Classroom> myClasses = List.copyOf(user.getMyClasses());
+        List<Classroom> myClasses = new ArrayList<>();
+        myClasses.addAll(user.getMyClasses());
 
         if (myClasses == null) {
             log.debug("------------>> myclass is null!!!!");

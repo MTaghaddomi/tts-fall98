@@ -51,8 +51,10 @@ public class AnswerSubmissionController {
                 (answerSubmissionRequestDTO);
 
         String requesterUsername = tokenUtil.token2Username();
+        System.out.println("answer controller, before save");
         answerSubmission = answerService.saveAnswer
                 (requesterUsername, exerciseId, answerSubmission, file);
+        System.out.println("answer controller, after save");
 
         return convertAnswer2answerInfoDTO(answerSubmission);
     }

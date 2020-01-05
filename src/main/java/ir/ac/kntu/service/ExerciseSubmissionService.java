@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -135,7 +136,21 @@ public class ExerciseSubmissionService {
 
             return exercise.getAnswersUrl();
         }else{
-            throw new NotEnoughAccessLevelException();
+            //TODO: kasif handle shod:|
+            List<String> allAnswers = exercise.getAnswersUrl();
+            System.out.println("all answer:");
+            System.out.println(allAnswers);
+            List<String> requesterAnswersOnly = new ArrayList<>();
+            String requesterAnswerDirectory = getRootFolderOfFiles(requesterUsername, classroom.getId()+"");
+            for(String answerUrl : allAnswers){
+                if(answerUrl.startsWith(requesterAnswerDirectory)){
+                    requesterAnswersOnly.add(answerUrl);
+                    System.out.println("added:  " + answerUrl);
+                }
+            }
+            return requesterAnswersOnly;
+            //
+//            throw new NotEnoughAccessLevelException();
         }
     }
 
@@ -156,7 +171,7 @@ public class ExerciseSubmissionService {
     private String getRootFolderOfFiles(String userId, String classId){
         String rootFolderAddress = prefixAddress + FILE_SEPARATOR +
                 "users" + FILE_SEPARATOR + userId + FILE_SEPARATOR +
-                "classes" + FILE_SEPARATOR + classId + FILE_SEPARATOR + "exercises";
+                "classes" + FILE_SEPARATOR + classId + FILE_SEPARATOR + "answers";
 
         return rootFolderAddress;
     }

@@ -59,16 +59,13 @@ public class UserController {
     }
 
     @GetMapping("/myClasses")
-    public List<ClassroomGeneralInfoDTO> getMyClasses() {
-        log.debug("-------> in myclasses controller");
-
+    public List<ClassroomGeneralInfoDTO> getMyClasses(){
         String requesterUsername = tokenUtil.token2Username();
         List<Classroom> myClasses = userService.getUserClasses(requesterUsername);
+        List<ClassroomGeneralInfoDTO> myClassesDTO = new ArrayList<>();
 
         //TODO: use mapper instead
-        List<ClassroomGeneralInfoDTO> myClassesDTO = new ArrayList<>();
         if(myClasses == null){
-            log.debug("-------> myclasses was null");
             return myClassesDTO;
         }
         for(Classroom classroom : myClasses){

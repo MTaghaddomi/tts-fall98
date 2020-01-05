@@ -58,4 +58,13 @@ public class ExerciseSubmission {
         }
         fileUrls.add(fileUrl);
     }
+
+    //TODO: tamiz konim
+    public void addAnswerUrl(String ans){
+        if(answersUrl == null){
+            answersUrl = new ArrayList<>();
+        }
+
+        answersUrl.add(ans);
+    }
 }
