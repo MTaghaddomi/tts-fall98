@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerSubmission {
@@ -18,6 +19,8 @@ public class AnswerSubmission {
     private long id;
 
     private String text;
+
+    private double grade;
 
     @Setter(AccessLevel.NONE)
     @ElementCollection(targetClass = String.class)
