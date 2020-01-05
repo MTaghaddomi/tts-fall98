@@ -41,15 +41,18 @@ public class AnswerSubmissionController {
     @PostMapping("/{exerciseId}/newApi")
     public AnswerSubmissionInfoDTO submitAnswer(
             @PathVariable Long exerciseId,
-            @RequestParam AnswerSubmissionRequestDTO answerSubmissionRequestDTO,
-            @RequestParam MultipartFile[] files) throws IOException {
+            //@RequestParam AnswerSubmissionRequestDTO answerSubmissionRequestDTO,
+            //@RequestParam MultipartFile[] files) throws IOException {
+            @RequestParam MultipartFile file) throws IOException {
+
+        AnswerSubmissionRequestDTO answerSubmissionRequestDTO = new AnswerSubmissionRequestDTO("");
 
         AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
                 (answerSubmissionRequestDTO);
 
         String requesterUsername = tokenUtil.token2Username();
         answerSubmission = answerService.saveAnswer
-                (requesterUsername, exerciseId, answerSubmission, files);
+                (requesterUsername, exerciseId, answerSubmission, file);
 
         return convertAnswer2answerInfoDTO(answerSubmission);
     }

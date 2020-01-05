@@ -75,6 +75,27 @@ public class AnswerSubmissionService {
         return answer;
     }
 
+    public AnswerSubmission saveAnswer(
+            String requesterUsername, long exerciseId, AnswerSubmission answer,
+            MultipartFile file) throws IOException {
+
+        User requester = userService.findByUsername(requesterUsername)
+                .orElseThrow(UserNotExistedException::new);
+        ExerciseSubmission exercise = exerciseService.findExerciseById(exerciseId);
+
+        answer.setCreator(requester);
+        answer.setQuestion(exercise);
+
+        if(file != null){
+            String classId = answer.getQuestion().getClassroom().getId() + "";
+            saveFile(file, requesterUsername, classId, answer);
+        }
+
+        answer = answerRepository.save(answer);
+
+        return answer;
+    }
+
     private void saveFiles(MultipartFile[] files, String userId, String classId,
                            AnswerSubmission answer) throws IOException {
         if(files == null) {
@@ -89,6 +110,20 @@ public class AnswerSubmissionService {
             String fileAddress = folderAddress + FILE_SEPARATOR + fileId;
             answer.addFileUrl(fileAddress);
         }
+    }
+
+    private void saveFile(MultipartFile file, String userId, String classId,
+                           AnswerSubmission answer) throws IOException {
+        if(file == null) {
+            return;
+        }
+
+        String folderAddress = getRootFolderOfFiles(userId, classId);
+
+        String fileId = fileUtil.saveFile(file, folderAddress);
+
+        String fileAddress = folderAddress + FILE_SEPARATOR + fileId;
+        answer.addFileUrl(fileAddress);
     }
 
     public AnswerSubmission updateAnswer(
