@@ -6,7 +6,6 @@ import ir.ac.kntu.exception.NotEnoughAccessLevelException;
 import ir.ac.kntu.exception.UserNotExistedException;
 import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.model.ExerciseSubmission;
-import ir.ac.kntu.model.Lesson;
 import ir.ac.kntu.model.User;
 import ir.ac.kntu.repository.ClassroomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,27 +65,27 @@ public class ClassroomService {
             throw new NotEnoughAccessLevelException();
         }
 
-        repository.delete(classroom);
+//        repository.delete(classroom);
 
-        classroom.setName(editClass.getName());
-        classroom.setDescription(editClass.getDescription());
-        Lesson lesson = classroom.getLesson();
-        lesson.setName(editClass.getLesson().getName());
-//        lesson.setDescription(editClass.getLesson().getDescription());
-
-        classroom.removeAllAssistants();
-        if(editClass.getAssistants() != null){
-            for(User assistant : editClass.getAssistants()){
-                classroom.addAssistant(assistant);
-            }
-        }
-
-        classroom.removeAllStudents();
-        if(editClass.getStudents() != null){
-            for(User student : editClass.getStudents()){
-                classroom.addStudent(student);
-            }
-        }
+//        classroom.setName(editClass.getName());
+//        classroom.setDescription(editClass.getDescription());
+//        Lesson lesson = classroom.getLesson();
+//        lesson.setName(editClass.getLesson().getName());
+////        lesson.setDescription(editClass.getLesson().getDescription());
+//
+//        classroom.removeAllAssistants();
+//        if(editClass.getAssistants() != null){
+//            for(User assistant : editClass.getAssistants()){
+//                classroom.addAssistant(assistant);
+//            }
+//        }
+//
+//        classroom.removeAllStudents();
+//        if(editClass.getStudents() != null){
+//            for(User student : editClass.getStudents()){
+//                classroom.addStudent(student);
+//            }
+//        }
 
         return repository.save(classroom);
     }
