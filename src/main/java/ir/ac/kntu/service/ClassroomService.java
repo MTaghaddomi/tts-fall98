@@ -1,6 +1,7 @@
 package ir.ac.kntu.service;
 
 import ir.ac.kntu.exception.ClassroomNotFoundException;
+import ir.ac.kntu.exception.JoinClassroomException;
 import ir.ac.kntu.exception.NotEnoughAccessLevelException;
 import ir.ac.kntu.exception.UserNotExistedException;
 import ir.ac.kntu.model.Classroom;
