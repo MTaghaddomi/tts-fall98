@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,7 @@ public class ExerciseSubmission {
 
     private String description;
 
+    @Setter(AccessLevel.NONE)
     @ElementCollection(targetClass = String.class)
     private List<String> fileUrls;
 
@@ -48,5 +50,12 @@ public class ExerciseSubmission {
 
     public boolean isCreator(String username){
         return creator.getUsername().equals(username);
+    }
+
+    public void addFileUrl(String fileUrl){
+        if(fileUrls == null){
+            fileUrls = new ArrayList<>();
+        }
+        fileUrls.add(fileUrl);
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ir.ac.kntu.controller</OriginalElement>
+  <nodes>
+    <node x="-329.49206349206344" y="-22.26984126984121">ir.ac.kntu.controller.CustomExceptionHandler</node>
+    <node x="-224.9999999999995" y="-296.35714285714255">ir.ac.kntu.controller.UserController</node>
+    <node x="262.1428571428572" y="96.1428571428574">ir.ac.kntu.controller.AnswerSubmissionController</node>
+    <node x="258.21428571428567" y="-79.64285714285694">ir.ac.kntu.controller.ExerciseSubmissionController</node>
+    <node x="285.515873015873" y="-329.206349206349">ir.ac.kntu.controller.ClassroomController</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="0.8739770867430442" x="219.5" y="-34.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

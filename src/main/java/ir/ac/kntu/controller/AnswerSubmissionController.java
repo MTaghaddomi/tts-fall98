@@ -2,16 +2,16 @@ package ir.ac.kntu.controller;
 
 import ir.ac.kntu.domain.submission.AnswerSubmissionInfoDTO;
 import ir.ac.kntu.domain.submission.AnswerSubmissionRequestDTO;
-import ir.ac.kntu.mapper.AnswerSubmissionMapper;
 import ir.ac.kntu.model.AnswerSubmission;
 import ir.ac.kntu.service.AnswerSubmissionService;
 import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @CrossOrigin
@@ -23,21 +23,11 @@ public class AnswerSubmissionController {
     @Autowired
     private UserTokenUtil tokenUtil;
 
-    @Autowired
-    AnswerSubmissionMapper answerSubmissionMapper;
-
-    @GetMapping("/{exerciseId}")
-    public List<AnswerSubmissionInfoDTO> getAllSubmissions(@PathVariable long exerciseId) {
-        List<AnswerSubmission> answerSubmissions = answerService.findAllAnswerSubmissionByExerciseId(exerciseId);
-        return answerSubmissions.stream()
-                .map(answerSubmissionMapper::convertAnswerSubmissionInfo)
-                .collect(Collectors.toList());
-    }
-
+    @Deprecated
     @PostMapping("/{exerciseId}")
     public AnswerSubmissionInfoDTO submitAnswer(
             @PathVariable Long exerciseId,
-            @RequestBody AnswerSubmissionRequestDTO answerSubmissionRequestDTO) {
+            @RequestBody AnswerSubmissionRequestDTO answerSubmissionRequestDTO){
 
         AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
                 (answerSubmissionRequestDTO);
@@ -48,10 +38,26 @@ public class AnswerSubmissionController {
         return convertAnswer2answerInfoDTO(answerSubmission);
     }
 
+    @PostMapping("/{exerciseId}/newApi")
+    public AnswerSubmissionInfoDTO submitAnswer(
+            @PathVariable Long exerciseId,
+            @RequestParam AnswerSubmissionRequestDTO answerSubmissionRequestDTO,
+            @RequestParam MultipartFile[] files) throws IOException {
+
+        AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
+                (answerSubmissionRequestDTO);
+
+        String requesterUsername = tokenUtil.token2Username();
+        answerSubmission = answerService.saveAnswer
+                (requesterUsername, exerciseId, answerSubmission, files);
+
+        return convertAnswer2answerInfoDTO(answerSubmission);
+    }
+
     @PutMapping("/{answerId}")
     public AnswerSubmissionInfoDTO updateAnswer(
             @PathVariable Long answerId,
-            @RequestBody AnswerSubmissionRequestDTO answerSubmissionRequestDTO) {
+            @RequestBody AnswerSubmissionRequestDTO answerSubmissionRequestDTO){
 
         AnswerSubmission answerSubmission = convertAnswerRequestDTO2Answer
                 (answerSubmissionRequestDTO);
@@ -64,13 +70,13 @@ public class AnswerSubmissionController {
     }
 
     @DeleteMapping("/{answerId}")
-    public HttpStatus deleteAnswer(@PathVariable Long answerId) {
+    public HttpStatus deleteAnswer(@PathVariable Long answerId){
         String requesterUsername = tokenUtil.token2Username();
         return answerService.deleteAnswer(requesterUsername, answerId);
     }
 
     @GetMapping("/{answerId}")
-    public AnswerSubmissionInfoDTO getAnswerInfo(@PathVariable Long answerId) {
+    public AnswerSubmissionInfoDTO getAnswerInfo(@PathVariable Long answerId){
         String requesterUsername = tokenUtil.token2Username();
         AnswerSubmission answer = answerService.getAnswerInfo(requesterUsername, answerId);
 
@@ -79,7 +85,7 @@ public class AnswerSubmissionController {
 
 
     private AnswerSubmissionInfoDTO convertAnswer2answerInfoDTO(
-            AnswerSubmission answerSubmission) {
+            AnswerSubmission answerSubmission){
         AnswerSubmissionInfoDTO result = new AnswerSubmissionInfoDTO(
                 answerSubmission.getId(), answerSubmission.getText(),
                 answerSubmission.getFileUrls());
@@ -87,7 +93,7 @@ public class AnswerSubmissionController {
     }
 
     private AnswerSubmission convertAnswerRequestDTO2Answer(
-            AnswerSubmissionRequestDTO answerDTO) {
+            AnswerSubmissionRequestDTO answerDTO){
         //TODO: use mapper instead
         AnswerSubmission result = new AnswerSubmission();
         result.setText(answerDTO.getText());
@@ -96,5 +102,18 @@ public class AnswerSubmissionController {
         //
 
         return result;
+    }
+
+    @GetMapping("/{id}/newApi")
+    public void sendFileToUser(
+            @PathVariable(name = "id") Long answerId,
+            HttpServletResponse response) throws IOException {
+
+        String requesterUsername = tokenUtil.token2Username();
+
+        answerService.copyFileTo(requesterUsername, response.getOutputStream(), answerId);
+
+        response.addHeader("Content-Disposition",
+                "attachment; filename=" + answerId);
     }
 }

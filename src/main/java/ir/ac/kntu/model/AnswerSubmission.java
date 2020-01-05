@@ -5,11 +5,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerSubmission {
@@ -19,8 +19,7 @@ public class AnswerSubmission {
 
     private String text;
 
-    private double grade;
-
+    @Setter(AccessLevel.NONE)
     @ElementCollection(targetClass = String.class)
     private List<String> fileUrls;
 
@@ -31,6 +30,13 @@ public class AnswerSubmission {
     @ManyToOne
     private User creator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private ExerciseSubmission question;
+
+    public void addFileUrl(String fileUrl){
+        if(fileUrls == null){
+            fileUrls = new ArrayList<>();
+        }
+        fileUrls.add(fileUrl);
+    }
 }
