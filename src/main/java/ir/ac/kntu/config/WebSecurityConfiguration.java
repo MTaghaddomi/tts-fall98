@@ -71,7 +71,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://frontesh.herokuapp.com", "http://localhost:8080", "http://172.20.10.5:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("https://frontesh.herokuapp.com"));
 
 //        configuration.setAllowedOrigins(Arrays.asList("https://frontesh-static.herokuapp.com"));
 //        configuration.setAllowedOrigins(Arrays.asList("system-analysis-design.herokuapp.com"));
