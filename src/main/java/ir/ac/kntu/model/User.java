@@ -54,12 +54,8 @@ public class User {
             mappedBy = "students")
     private List<Classroom> myClasses;
 
-    public List<Classroom> getMyClasses() {
-        return myClasses==null ? new ArrayList<>() : myClasses;
-    }
-
-    public void addMeToClass(Classroom classroom){
-        if(classroom == null){
+    public void addMeToClass(Classroom classroom) {
+        if (classroom == null) {
             throw new NullPointerException();
         }
 

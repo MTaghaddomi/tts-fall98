@@ -1,5 +1,6 @@
 package ir.ac.kntu.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import lombok.*;
 import lombok.experimental.Wither;
@@ -39,6 +40,7 @@ public class Classroom {
             inverseJoinColumns = @JoinColumn(name = "ta_id", referencedColumnName = "id"))
     private List<User> assistants;
 
+    @JsonIgnore
     @Setter(AccessLevel.NONE)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "participate",

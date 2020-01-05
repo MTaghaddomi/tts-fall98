@@ -23,6 +23,7 @@ public class AnswerSubmission {
     @Setter(AccessLevel.NONE)
     private double grade;
 
+    @Setter(AccessLevel.NONE)
     @ElementCollection(targetClass = String.class)
     private List<String> fileUrls;
 
