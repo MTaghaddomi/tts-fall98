@@ -1,15 +1,11 @@
 package ir.ac.kntu.controller;
 
-import ir.ac.kntu.exception.AnswerNotExistedException;
 import ir.ac.kntu.exception.NotEnoughAccessLevelException;
-import ir.ac.kntu.model.AnswerSubmission;
 import ir.ac.kntu.util.FileTransitionUtil;
 import ir.ac.kntu.util.UserTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -25,12 +21,34 @@ public class FileController {
     @Autowired
     private FileTransitionUtil fileUtil;
 
+    @Value("${spring.servlet.multipart.location}")
+    private String prefixAddress;
+
+    private final static String FILE_SEPARATOR = File.separator;
+
     @GetMapping("/{address}")
     public void sendFileToUser(
             @PathVariable(name = "address") String address,
             HttpServletResponse response) throws IOException {
 
         String requesterUsername = tokenUtil.token2Username();
+
+        String fileName = copyFileTo(requesterUsername, address, response.getOutputStream());
+
+        response.addHeader("Content-Disposition",
+                "attachment; filename=" + fileName);
+    }
+
+    @GetMapping("/{username}/{classId}/answers/{fileId}")
+    public void sendFileToUser(
+            @PathVariable(name = "username") String username,
+            @PathVariable(name = "classId") String classId,
+            @PathVariable(name = "fileId") String fileId,
+            HttpServletResponse response) throws IOException {
+
+        String requesterUsername = tokenUtil.token2Username();
+
+        String address = getAddress(username, classId, "answers", fileId);
 
         String fileName = copyFileTo(requesterUsername, address, response.getOutputStream());
 
@@ -47,5 +65,11 @@ public class FileController {
         }else{
             throw new NotEnoughAccessLevelException();
         }
+    }
+
+    private String getAddress(String userId, String classId, String part, String folderId){
+        return prefixAddress + FILE_SEPARATOR + "users" + FILE_SEPARATOR + userId +
+                FILE_SEPARATOR + "classes" + FILE_SEPARATOR + classId + FILE_SEPARATOR +
+                part + FILE_SEPARATOR + folderId;
     }
 }
