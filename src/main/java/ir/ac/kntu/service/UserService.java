@@ -2,6 +2,7 @@ package ir.ac.kntu.service;
 
 import ir.ac.kntu.domain.user.*;
 import ir.ac.kntu.exception.DuplicateUserException;
+import ir.ac.kntu.exception.InvalidPassword;
 import ir.ac.kntu.exception.UserNotExistedException;
 import ir.ac.kntu.model.Classroom;
 import ir.ac.kntu.model.User;
@@ -57,6 +58,12 @@ public class UserService implements UserDetailsService {
 
         if (!isUsernameExisted(userDTO.getUsername())) {
             throw new UserNotExistedException();
+        }
+
+        String userPassword = userRepository.findUserByUsername(userDTO.getUsername())
+                .get().getPassword();
+        if(!userDTO.getPassword().equals(userPassword)){
+            throw new InvalidPassword();
         }
 
         User user = userDTO.convertToUser();
