@@ -23,13 +23,14 @@ public class GradeExercisesController {
     @PostMapping("/{exerciseId}/answer/{answerId}")
     public void gradeExercise(@PathVariable long exerciseId, @PathVariable long answerId,
                               @RequestBody GradeAnswerInfoRequestDTO gradeDto) {
-
         AnswerSubmission answerSubmission = gradeMapper.convertToGradeAnswerRequestDto(gradeDto);
-
         service.gradeExercise(answerSubmission, exerciseId, answerId);
-
-
     }
 
+    @GetMapping("/{exerciseId}/answer/{answerId}")
+    public double getGradeExercise(@PathVariable long exerciseId, @PathVariable long answerId) {
+        return service.findExerciseGrade(exerciseId, answerId);
+
+    }
 
 }
