@@ -193,6 +193,10 @@ public class AnswerSubmissionService {
         fileUtil.copyFile(fileAddress, outputStream);
     }
 
+    public void copyFileTo(String fileAddress, OutputStream outputStream) throws IOException {
+        fileUtil.copyFile(fileAddress, outputStream);
+    }
+
     private String getRootFolderOfFiles(String userId, String classId){
         String rootFolderAddress = prefixAddress + FILE_SEPARATOR +
                 "users" + FILE_SEPARATOR + userId + FILE_SEPARATOR +

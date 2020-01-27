@@ -40,7 +40,8 @@ public class UserService implements UserDetailsService {
 
     public UserSignUpResponseDTO signUp(UserSignUpRequestDTO userDTO)
             throws DuplicateUserException {
-        userDTO.setPassword(bcryptEncode.encode(userDTO.getPassword()));
+        //userDTO.setPassword(bcryptEncode.encode(userDTO.getPassword()));
+        userDTO.setPassword(userDTO.getPassword());
 
         User savedUser = create(userDTO.convertToUser());
 
@@ -54,7 +55,8 @@ public class UserService implements UserDetailsService {
 
     public UserSignInResponseDTO signIn(UserSignInRequestDTO userDTO)
             throws UserNotExistedException {
-        userDTO.setPassword(bcryptEncode.encode(userDTO.getPassword()));
+//        userDTO.setPassword(bcryptEncode.encode(userDTO.getPassword()));
+        userDTO.setPassword(userDTO.getPassword());
 
         if (!isUsernameExisted(userDTO.getUsername())) {
             throw new UserNotExistedException();

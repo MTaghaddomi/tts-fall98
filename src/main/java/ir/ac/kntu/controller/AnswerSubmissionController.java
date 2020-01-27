@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -120,5 +121,22 @@ public class AnswerSubmissionController {
 
         response.addHeader("Content-Disposition",
                 "attachment; filename=" + answerId);
+    }
+
+    @GetMapping("/newApi/src/main/resources/dynamic/users/{username}/classes/{classId}/answers/{answerId}")
+    public void sendFileToUser(
+            @PathVariable String username,
+            @PathVariable String classId,
+            @PathVariable String answerId,
+            HttpServletResponse response) throws IOException {
+        String s = File.separator;
+        String fileAddress = "src" + s + "main" + s + "resources" + s +
+                "dynamic" + s + "users" + s + username + s + "classes" + s +
+                classId + "answers" + s + answerId;
+
+        answerService.copyFileTo(fileAddress, response.getOutputStream());
+
+        response.addHeader("Content-Disposition",
+                "attachment; filename=" + "submission");
     }
 }
